@@ -1,26 +1,24 @@
 // TODO: Requisições de controladores e midweres.
 
-const { Router } = require('express');
+const { Router } = require('express')
+const { listarCategorias } = require('./controladores/categorias')
 const rotas = Router()
 
 //Teste inicial
 rotas.get('/', (req, res) => {
-    return res.status(200).json({ mensagem: "Teste de API" })
+  return res.status(200).json({ mensagem: 'Teste de API' })
 })
 
 //Endpoints oficiais de CATEGORIAS:
-rotas.get('/categoria',) // Listar todas as categorias cadastradas
+rotas.get('/categoria', listarCategorias) // Listar todas as categorias cadastradas
 
 //Endpoints oficiais de USUARIOS:
-rotas.post('/usuario',) //Cadastro de usuario
-rotas.post('/login',) // Login de usuario
+rotas.post('/usuario') //Cadastro de usuario
+rotas.post('/login') // Login de usuario
 
 //TODO: Validação obrigatoria com Token
 
-rotas.get('/usuario',) // Dedatalhar dados do perfil de usuario
-rotas.put('/usuario',) // Atualizar/Editar perfil 
-
-
-
+rotas.get('/usuario') // Dedatalhar dados do perfil de usuario
+rotas.put('/usuario') // Atualizar/Editar perfil
 
 module.exports = rotas
