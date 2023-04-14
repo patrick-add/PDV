@@ -1,4 +1,5 @@
 const knex = require('../conexao')
+const bcrypt = require('bcrypt')
 
 const cadastroDeUsuario = async (req, res) => {
     const { nome, email, senha } = req.body
@@ -20,9 +21,11 @@ const cadastroDeUsuario = async (req, res) => {
             res.status(401).json({ mensagem: "O email informado já existe !" })
         }
 
-        const cadastro = await knex('usuarios').insert({ nome, email, senha }).returning('*')
+        const criptografia = await bcrypt.hash(senha, 10)
 
-        return res.status(200).json(cadastro)
+        const cadastro = await knex('usuarios').insert({ nome, email, senha: criptografia }).returning('*')
+
+        return res.status(200).json(cadastro[0])
 
     } catch (error) {
         res.status(500).json({ mensagem: "Erro interno" })
