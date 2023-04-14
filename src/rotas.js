@@ -2,7 +2,7 @@
 
 const { Router } = require('express')
 const { listarCategorias } = require('./controladores/categorias')
-const { cadastroDeUsuario } = require('./controladores/usuarios')
+const { cadastroDeUsuario, editarUsuario } = require('./controladores/usuarios')
 const login = require('./controladores/login')
 const autenticarUsuario = require('./filtros/autenticacao_de_usuario')
 const rotas = Router()
@@ -23,6 +23,6 @@ rotas.post('/login', login) // Login de usuario
 rotas.use(autenticarUsuario)
 
 rotas.get('/usuario') // Dedatalhar dados do perfil de usuario
-rotas.put('/usuario') // Atualizar/Editar perfil
+rotas.put('/usuario', editarUsuario) // Atualizar/Editar perfil
 
 module.exports = rotas

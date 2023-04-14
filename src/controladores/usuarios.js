@@ -33,6 +33,36 @@ const cadastroDeUsuario = async (req, res) => {
 
 }
 
+const editarUsuario = async (req, res) => {
+    let { nome, email, senha } = req.body;
+    const { id } = req.usuario
+    try {
+        if (!nome && !email && !senha) {
+            return res.status(404).json('É necessário informar pelo menos um campo para atualização');
+        }
+
+        if (senha) {
+            senha = await bcrypt.hash(senha, 10);
+        }
+
+        if (email && email !== req.usuario.email) {
+            const verificarEmail = await knex('usuarios').where({ email }).first();
+
+            if (verificarEmail) {
+                return res.status(404).json('O email informado já está em uso');
+            }
+        }
+
+        const atualizandoUsuario = await knex('usuarios').where({ id }).update({ nome, email, senha });
+
+    } catch (error) {
+        return res.status(400).json(error.message);
+    }
+
+    return res.status(204).json()
+}
+
 module.exports = {
-    cadastroDeUsuario
+    cadastroDeUsuario,
+    editarUsuario
 }
