@@ -61,8 +61,21 @@ const editarUsuario = async (req, res) => {
 
     return res.status(204).json()
 }
+const detalharDadosPerfilUsuario = async (req, res) => {
+    const { id } = req.usuario
+
+    try {
+
+        const dadosDoUsuarioLogado = await knex('usuarios').select('*').where({ id }).first();
+        
+        return res.status(200).json(dadosDoUsuarioLogado)
+    } catch (error) {
+        return res.status(400).json(error.message);
+    }
+}
 
 module.exports = {
     cadastroDeUsuario,
-    editarUsuario
+    editarUsuario,
+    detalharDadosPerfilUsuario
 }

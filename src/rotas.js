@@ -2,7 +2,7 @@
 
 const { Router } = require('express')
 const { listarCategorias } = require('./controladores/categorias')
-const { cadastroDeUsuario, editarUsuario } = require('./controladores/usuarios')
+const { cadastroDeUsuario, editarUsuario, detalharDadosPerfilUsuario } = require('./controladores/usuarios')
 const login = require('./controladores/login')
 const autenticarUsuario = require('./filtros/autenticacao_de_usuario')
 const rotas = Router()
@@ -22,7 +22,7 @@ rotas.post('/login', login) // Login de usuario
 //TODO: Validação obrigatoria com Token
 rotas.use(autenticarUsuario)
 
-rotas.get('/usuario') // Dedatalhar dados do perfil de usuario
+rotas.get('/usuario', detalharDadosPerfilUsuario) // Dedatalhar dados do perfil de usuario
 rotas.put('/usuario', editarUsuario) // Atualizar/Editar perfil
 
 module.exports = rotas
