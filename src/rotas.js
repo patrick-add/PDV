@@ -1,8 +1,12 @@
-// TODO: Requisições de controladores e midweres.
+// TODO: Requisições de controladores e middleware.
 
 const { Router } = require('express')
 const { listarCategorias } = require('./controladores/categorias')
-const { cadastroDeUsuario, editarUsuario, detalharDadosPerfilUsuario } = require('./controladores/usuarios')
+const {
+  cadastroDeUsuario,
+  editarUsuario,
+  detalharDadosPerfilUsuario
+} = require('./controladores/usuarios')
 const login = require('./controladores/login')
 const autenticarUsuario = require('./filtros/autenticacao_de_usuario')
 const rotas = Router()
