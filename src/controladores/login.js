@@ -2,18 +2,13 @@ const knex = require('../conexao')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
-const login = async (req, res) => {
+const login = (joiSchemaLogin) => async (req, res) => {
   const { email, senha } = req.body
 
-  if (!email) {
-    return res.status(400).json({ mensagem: 'Email é obrigatório!' })
-  }
-
-  if (!senha) {
-    return res.status(400).json({ mensagem: 'Senha é obrigatória!' })
-  }
-
   try {
+
+await joiSchemaLogin.validateAsync(req.body)
+
     const validarUsuario = await knex('usuarios').where({ email }).first()
 
     if (!validarUsuario) {
@@ -38,8 +33,7 @@ const login = async (req, res) => {
       token
     })
   } catch (error) {
-    console.log(error.message)
-    return res.status(500).json({ mensagem: `Eroo interno do servidor: ${error.message}` })
+    return res.status(400).json(error.message)
   }
 }
 

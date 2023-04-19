@@ -2,15 +2,11 @@
 
 const { Router } = require('express')
 const { listarCategorias } = require('./controladores/categorias')
-const {
-  cadastroDeUsuario,
-  editarUsuario,
-  detalharDadosPerfilUsuario
-} = require('./controladores/usuarios')
+const { cadastroDeUsuario, editarUsuario, detalharDadosPerfilUsuario} = require('./controladores/usuarios')
 const login = require('./controladores/login')
 const autenticarUsuario = require('./filtros/autenticacao_de_usuario')
 const validarCadastroDeUsuario = require('./intermediarios/validacaoCadastroDeUsuario')
-const schemaUsuario = require('./validações/schemaUsuario')
+const {schemaUsuario, schemaLogin} = require('./validações/schemaUsuario')
 const validarEditarUsuario = require('./intermediarios/validacaoEditarUsuario')
 const rotas = Router()
 
@@ -24,7 +20,7 @@ rotas.get('/categoria', listarCategorias) // Listar todas as categorias cadastra
 
 //Endpoints oficiais de USUARIOS:
 rotas.post('/usuario', validarCadastroDeUsuario(schemaUsuario), cadastroDeUsuario) //Cadastro de usuario
-rotas.post('/login', login) // Login de usuario
+rotas.post('/login', login(schemaLogin)) // Login de usuario
 
 //TODO: Validação obrigatoria com Token
 rotas.use(autenticarUsuario)
