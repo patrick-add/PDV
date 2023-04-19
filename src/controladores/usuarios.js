@@ -13,7 +13,7 @@ const cadastroDeUsuario = async (req, res) => {
 
     return res.status(200).json(cadastro[0])
   } catch (error) {
-    return res.status(500).json(error.message)
+    return res.status(400).json(error.message)
   }
 }
 
