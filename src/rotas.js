@@ -1,31 +1,28 @@
-// TODO: Requisições de controladores e middleware.
-
 const { Router } = require('express')
 const { listarCategorias } = require('./controladores/categorias')
-const { cadastroDeUsuario, editarUsuario, detalharDadosPerfilUsuario} = require('./controladores/usuarios')
+const {
+  cadastroDeUsuario,
+  editarUsuario,
+  detalharDadosPerfilUsuario
+} = require('./controladores/usuarios')
 const login = require('./controladores/login')
 const autenticarUsuario = require('./filtros/autenticacao_de_usuario')
-const validarCadastroDeUsuario = require('./intermediarios/validacaoCadastroDeUsuario')
-const {schemaUsuario, schemaLogin} = require('./validações/schemaUsuario')
-const validarEditarUsuario = require('./intermediarios/validacaoEditarUsuario')
+const { schemaUsuario, schemaLogin } = require('./validações/schemaUsuario')
+const validarSchema = require('./intermediarios/validacarSchema')
 const rotas = Router()
 
-//Teste inicial
 rotas.get('/', (req, res) => {
   return res.status(200).sendFile(__dirname + '/index.html')
 })
 
-//Endpoints oficiais de CATEGORIAS:
-rotas.get('/categoria', listarCategorias) // Listar todas as categorias cadastradas
+rotas.get('/categoria', listarCategorias)
 
-//Endpoints oficiais de USUARIOS:
-rotas.post('/usuario', validarCadastroDeUsuario(schemaUsuario), cadastroDeUsuario) //Cadastro de usuario
-rotas.post('/login', login(schemaLogin)) // Login de usuario
+rotas.post('/usuario', validarSchema(schemaUsuario), cadastroDeUsuario)
+rotas.post('/login', validarSchema(schemaLogin), login)
 
-//TODO: Validação obrigatoria com Token
 rotas.use(autenticarUsuario)
 
-rotas.get('/usuario', detalharDadosPerfilUsuario) // Dedatalhar dados do perfil de usuario
-rotas.put('/usuario', validarEditarUsuario(schemaUsuario), editarUsuario) // Atualizar/Editar perfil
+rotas.get('/usuario', detalharDadosPerfilUsuario)
+rotas.put('/usuario', validarSchema(schemaUsuario), editarUsuario)
 
 module.exports = rotas

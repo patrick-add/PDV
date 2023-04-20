@@ -5,6 +5,12 @@ const cadastroDeUsuario = async (req, res) => {
   const { nome, email, senha } = req.body
 
   try {
+    const validarSeEmailExiste = await knex('usuarios').where({ email }).first()
+
+    if (validarSeEmailExiste) {
+      return res.status(409).json({ mensagem: 'O email informado já existe !' })
+    }
+
     const criptografia = await bcrypt.hash(senha, 10)
 
     const cadastro = await knex('usuarios')
@@ -13,7 +19,8 @@ const cadastroDeUsuario = async (req, res) => {
 
     return res.status(200).json(cadastro[0])
   } catch (error) {
-    return res.status(400).json(error.message)
+    console.error(error)
+    return res.status(500).json({ mensagem: 'Erro interno.' })
   }
 }
 
@@ -22,6 +29,14 @@ const editarUsuario = async (req, res) => {
   const { id } = req.usuario
 
   try {
+    if (email !== req.usuario.email) {
+      const verificarEmail = await knex('usuarios').where({ email }).first()
+
+      if (verificarEmail) {
+        return res.status(404).json('O email informado já está em uso')
+      }
+    }
+
     if (senha) {
       senha = await bcrypt.hash(senha, 10)
     }
@@ -30,7 +45,8 @@ const editarUsuario = async (req, res) => {
 
     return res.status(204).json()
   } catch (error) {
-    return res.status(400).json(error.message)
+    console.error(error)
+    return res.status(500).json({ mensagem: 'Erro interno.' })
   }
 }
 
@@ -45,7 +61,8 @@ const detalharDadosPerfilUsuario = async (req, res) => {
 
     return res.status(200).json(dadosDoUsuarioLogado)
   } catch (error) {
-    return res.status(400).json(error.message)
+    console.error(error)
+    return res.status(500).json({ mensagem: 'Erro interno.' })
   }
 }
 
