@@ -1,104 +1,94 @@
 {
-    "swagger": "3.0",
-"openapi":"3.0.0",
-"info": {
+  "swagger": "3.0",
+  "openapi": "3.0.0",
+  "info": {
     "title": "PDV - Fenda do Biquini",
     "description": "Documentação da API",
     "version": "1.0.0"
-},
-"basePath": "/",
-"components": {
-  "securitySchemes":{
-    "bearerAuth":{
+  },
+  "basePath": "/",
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
         "type": "http",
         "scheme": "bearer",
         "bearerFormat": "jwt"
+      }
     }
-  }
-},
-"security":[{"bearerAuth": []}],
+  },
+  "security": [{ "bearerAuth": [] }],
 
-
-"paths":{
-    "/usuario":{
-"post":{
-    "tags": ["Usuarios"],
-    "requestBody":{
-        "content":{
-            "application/json":{
-                "schema":{
-                    "type": "object",
-                    "properties":{
-                        "nome":{
-                            "type": "string"
-                    },
-                    "email": {
-                        "type": "string"
-                    },
-                    "senha":{
-                        "type": "string"
-                    }
-                   
+  "paths": {
+    "/usuario": {
+      "post": {
+        "tags": ["Usuarios"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "senha": {
+                    "type": "string"
+                  }
                 }
-            } 
+              }
+            }
+          }
         },
         "responses": {
-            "400":{
-                "description": "É obrigatório informar o nome!"
-            },
-           "401": {
-                "description": "É obrigatório informar o email!"
-            },
-    
-           "402": {
-                "description": "É obrigatório informar a senha!"
-            }
-           
+          "400": {
+            "description": "É obrigatório informar o nome!"
+          },
+          "401": {
+            "description": "É obrigatório informar o email!"
+          },
+
+          "402": {
+            "description": "É obrigatório informar a senha!"
+          }
         }
-       
-    }
-    
-}
-    }
-    
-},
+      }
+    },
 
-
-
-
-"/login": {
-    "post": {
+    "/login": {
+      "post": {
         "tags": ["Usuarios"],
-       "requestBody": {
-        "content":{
-            "application/json":{
-                "schema":{
-                    "type": "object",
-                    "properties":{
-                    "email": {
-                        "type": "string"
-                    },
-                    "senha":{
-                        "type": "string"
-                    }
-                   
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "senha": {
+                    "type": "string"
+                  }
                 }
-            } 
-        }
-        }
-       },
-        "responses":{
-            "400":{
-                "description": "É obrigatório informar o nome!"
-            },
-           "402": {
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "É obrigatório informar o nome!"
+          },
+          "402": {
             "description": "È obrigatório informar um email!"
-           },
-           "401": {
+          },
+          "401": {
             "description": "È obrigatório informar a senha!"
-           }
+          }
+        }
+      }
     }
-}
-}
-}
+  }
 }
