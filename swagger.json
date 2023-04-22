@@ -116,11 +116,15 @@
           "400": {
             "description": "É obrigatório informar o nome! || É obrigatório informar o email! || É obrigatório informar o senha!"
           },
-          "422": {
-            "description": "O email informado não é válido || A senha precisa conter, no mínimo, 4 caracteres."
+          "404": {
+            "description": "O email informado já está em uso"
           },
           "401": {"description": "Para acessar este recurso um token de autenticação válido deve ser enviado"}
-        }
+        },
+          "422": {
+            "description": "O email informado não é válido || A senha precisa conter, no mínimo, 4 caracteres."
+          }
+          
         
       },
       "get":{
@@ -171,8 +175,8 @@
           }
         },
         "responses": {
-          "201": {
-            "description": "Created",
+          "200": {
+            "description": "Success",
             "content":{
               "application/json": {"schema": {
                 "type": "object",
