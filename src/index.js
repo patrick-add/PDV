@@ -12,12 +12,9 @@ app.use(express.json())
 app.use('/api-docs', swagger.serve, swagger.setup(swaggerDoc))
 app.use(rotas)
 
-// app.listen(process.env.PORT, () => {
-//   console.log(`Servidor conectado a porta: ${process.env.PORT || 3030}`)
-// })
 
 app.listen(port, () => {
   console.log(
-    `Server running on port ${port}\nhttp://localhost:${port}\npress CTRL+C to stop server`
+    `Servidor conectado a porta: ${port}\nhttp://localhost:${port}\nPressione CTRL+C para interroper o servidor`
   )
 })
