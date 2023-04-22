@@ -192,7 +192,7 @@
          }
        },
           "400": {
-            "description": "É obrigatório informar o nome! || É obrigatório informar o email! || É obrigatório informar o senha!"
+            "description": "É obrigatório informar o email! || É obrigatório informar o senha!"
           },
           "422": {
             "description": "O email informado não é válido. || A senha precisa conter, no mínimo, 4 caracteres."
