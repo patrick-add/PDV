@@ -1,0 +1,222 @@
+{
+  "swagger": "3.0",
+  "openapi": "3.0.0",
+  "info": {
+    "title": "PDV - Fenda do Biquini",
+    "description": "Documentação da API",
+    "version": "1.0.0"
+  },
+  "basePath": "/",
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "jwt"
+      }
+    }
+  },
+  
+
+  "paths": {
+    "/usuario": {
+      "post": {
+        "tags": ["Usuarios"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "senha": {
+                    "type": "string"
+                  }
+                },
+                "example":{
+                  "nome": "Lulamolusco",
+                  "email": "lula.molusco@siricascudo.com",
+                  "senha": "clarinette"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+"description": "Created",
+"content":{
+  "application/json": {"schema": {
+    "type": "object",
+    "properties":{
+      "id": {"type": "integer", "description": "Número de identificação do usuario."},
+      "nome": {"type": "string", "description": "Nome de usuario"},
+      "email": {"type": "string", "description": "Email válido"}
+    }
+  }}
+}
+          },
+          "400": {
+            "description": "É obrigatório informar o nome! || É obrigatório informar o email! || É obrigatório informar o senha!"
+          },
+          "422": {
+            "description": "O email informado não é válido || A senha precisa conter, no mínimo, 4 caracteres."
+          },
+          "content":{
+            "application/json":{
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": {"type": "string", "description": "Nome de usuario"},
+                  "email": {"type": "string", "description": "Email válido"},
+                  "senha": {"type": "string", "description": "Senha secreta do usuario"}
+                }
+              }
+            }
+          }
+        }
+      },
+      "put":{
+        "security": [{ "bearerAuth": [] }],
+        "tags": ["Usuarios"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "senha": {
+                    "type": "string"
+                  }
+                },
+                "example":{
+                  "nome": "Bob Esponja Calça Quadrada",
+                  "email": "bob.esponja@siricascudo.com",
+                  "senha": "hamburguer-de-siri"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Sem resposta no corpo da requisição."
+          },
+          "400": {
+            "description": "É obrigatório informar o nome! || É obrigatório informar o email! || É obrigatório informar o senha!"
+          },
+          "422": {
+            "description": "O email informado não é válido || A senha precisa conter, no mínimo, 4 caracteres."
+          },
+          "401": {"description": "Para acessar este recurso um token de autenticação válido deve ser enviado"}
+        }
+        
+      },
+      "get":{
+        "security": [{ "bearerAuth": [] }],
+        "tags": ["Usuarios"],
+        "responses":{
+          "200": {
+            "content":{
+              "application/json": {"schema": {
+                "type": "object",
+                "properties":{
+                  "id": {"type": "integer", "description": "Número de identificação do usuario."},
+                  "nome": {"type": "string", "description": "Nome de usuario logado"},
+                  "email": {"type": "string", "description": "Email de usuario logado"}
+                }
+              }
+            }
+         }
+          },
+          "401": {"description": "Para acessar este recurso um token de autenticação válido deve ser enviado"},
+          "500": {"description": "Erro interno."}
+        }
+      }
+    },
+
+    "/login": {
+      "post": {
+        "tags": ["Usuarios"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "senha": {
+                    "type": "string"
+                  }
+                },
+                "example":{
+                  "email": "lula.molusco@siricascudo.com",
+                  "senha": "clarinette"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content":{
+              "application/json": {"schema": {
+                "type": "object",
+                "properties":{
+                  "mensagem": {"type": "string", "description": "Usuario Logado"},
+                  "id": {"type": "integer", "description": "Número de identificação do usuario."},
+                  "nome": {"type": "string", "description": "Nome de usuario"},
+                  "email": {"type": "string", "description": "Email válido"},
+                  "token": {"type": "string", "description": "jwt"}
+                }
+              }
+            }
+         }
+       },
+          "400": {
+            "description": "É obrigatório informar o nome! || É obrigatório informar o email! || É obrigatório informar o senha!"
+          },
+          "422": {
+            "description": "O email informado não é válido. || A senha precisa conter, no mínimo, 4 caracteres."
+          }
+        }
+      }
+    },
+
+"/categoria":{
+  "get":{
+    "tags": ["Categorias"],
+    "responses":{
+      "200": {
+        "description": "Lista de categorias cadastradas.",
+        "content":{
+          "application/json":{"schema":{
+            "type": "object",
+            "properties":{
+              "id": {"type": "integer", "description": "Identificação da categoria"},
+              "descricao": {"type": "string", "description": "Descrição da categoria"}
+            }
+          }}
+        }
+      },
+      "500": {"description": "Erro interno."}
+    }
+  }
+}
+
+  }
+}

@@ -15,7 +15,7 @@ const cadastroDeUsuario = async (req, res) => {
 
     const cadastro = await knex('usuarios')
       .insert({ nome, email, senha: criptografia })
-      .returning(['nome', 'email'])
+      .returning(['id','nome', 'email'])
 
     return res.status(200).json(cadastro[0])
   } catch (error) {

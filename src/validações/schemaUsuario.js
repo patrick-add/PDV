@@ -9,7 +9,7 @@ const schemaUsuario = joi.object({
   email: joi.string().email().required().messages({
     'any.required': 'É obrigatório informar o email!',
     'string.empty': 'Email não pode ser um campo vazio.',
-    'string.email': 'O Email não é válido'
+    'string.email': 'O Email informado não é válido'
   }),
 
   senha: joi.string().trim().min(4).required().messages({
@@ -23,7 +23,7 @@ const schemaLogin = joi.object({
   email: joi.string().email().required().messages({
     'any.required': 'É obrigatório informar o email!',
     'string.empty': 'Email não pode ser um campo vazio.',
-    'string.email': 'O Email não é válido'
+    'string.email': 'O Email não é válido.'
   }),
 
   senha: joi.string().trim().min(4).required().messages({
