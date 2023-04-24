@@ -12,7 +12,7 @@ const validarSchema = require('./intermediarios/validacarSchema')
 const rotas = Router()
 
 rotas.get('/', (req, res) => {
-  return res.status(200).sendFile(__dirname + '/pages/index.html')
+  return res.status(200).sendFile(__dirname + '../public/pages/index.html')
 })
 
 rotas.get('/categoria', listarCategorias)
