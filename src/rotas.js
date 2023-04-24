@@ -1,3 +1,4 @@
+const path = require('path')
 const { Router } = require('express')
 const { listarCategorias } = require('./controladores/categorias')
 const {
@@ -12,7 +13,7 @@ const validarSchema = require('./intermediarios/validacarSchema')
 const rotas = Router()
 
 rotas.get('/', (req, res) => {
-  return res.status(200).sendFile(__dirname + '../public/pages/index.html')
+  return res.status(200).sendFile(path.join(__dirname, '../public/pages/index.html'))
 })
 
 rotas.get('/categoria', listarCategorias)
