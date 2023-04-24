@@ -21,20 +21,12 @@
             background-color: #00d2e9;
             overflow: hidden;
             height: 100vh;
-            background-image: url(./fenda-do-biquini-1024.png);
+            background-image: url(../../public/assets/img/fenda-do-biquini-1024.png);
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center center;
             background-attachment: fixed;
         } 
-
-        /* #imagemBody {
-            position: absolute;
-            left: 0;
-            height: 72rem;
-            width: 27rem;
-            border-radius: 0%;
-        } */
 
         h1 {
             color: white;
@@ -83,6 +75,7 @@
         top:30%;
         left:50%;
         transform: translate(-50%, -50%);
+        border-radius: 1rem;
     }
 
 
@@ -197,17 +190,16 @@
 
 </head>
 <body  onmousemove="document.getElementById('musica').play();">
-
         <h1>DEVS: </h1>
         <ol class="listaAutores">
-            <li>Patrick Andrade <img src="./patrick.jpeg" alt="Patrick"></li>
-            <li>Mateus Fernando <img src="./mateus.jpg" alt="Patrick"></li>
-            <li>Reunilson Barbosa <img src="./reunilson.jpg" alt="Patrick"></li>
-            <li>William Diangellis <img src="./willian.jpg" alt="Patrick"></li>
+            <li>Patrick Andrade <img src="../../public/assets/img/patrick.jpeg" alt="Patrick"></li>
+            <li>Mateus Fernando <img src="../../public/assets/img/mateus.jpg" alt="Patrick"></li>
+            <li>Reunilson Barbosa <img src="../../public/assets/img/reunilson.jpg" alt="Patrick"></li>
+            <li>William Diangellis <img src="../../public/assets/img/willian.jpg" alt="Patrick"></li>
         </ol>
         <button class="botao" >Clique aqui</button>
         <audio id="musica" >
-            <source src="./som-fenda-do-biquini.mpeg">
+            <source src="../../public/assets/audios/som-fenda-do-biquini.mpeg">
         </audio>
 
     <script>
