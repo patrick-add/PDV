@@ -15,9 +15,9 @@ const cadastroDeUsuario = async (req, res) => {
 
     const cadastro = await knex('usuarios')
       .insert({ nome, email, senha: criptografia })
-      .returning(['nome', 'email'])
+      .returning(['id','nome', 'email'])
 
-    return res.status(200).json(cadastro[0])
+    return res.status(201).json(cadastro[0])
   } catch (error) {
     console.error(error)
     return res.status(500).json({ mensagem: 'Erro interno.' })
