@@ -41,7 +41,7 @@ const editarUsuario = async (req, res) => {
       senha = await bcrypt.hash(senha, 10)
     }
 
-    const atualizandoUsuario = await knex('usuarios').where({ id }).update({ nome, email, senha })
+ await knex('usuarios').where({ id }).update({ nome, email, senha })
 
     return res.status(204).json()
   } catch (error) {
