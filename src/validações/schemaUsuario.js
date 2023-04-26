@@ -33,4 +33,27 @@ const schemaLogin = joi.object({
   })
 })
 
-module.exports = { schemaUsuario, schemaLogin }
+const schemaProdutos = joi.object({
+  descricao: joi.string().required().messages({
+    'any.required': 'É obrigatório informar a descrição do produto!',
+    'string.empty': 'Descrição não pode ser um campo vazio.'
+  }),
+  quantidade_estoque: joi.string().required().messages({
+    'any.required': 'É obrigatório informar a quantidade em estoque!',
+    'string.empty': 'quantidade_estoque não pode ser um campo vazio.'
+  }),
+  valor: joi.number().required().messages({
+    'any.required': 'É obrigatório informar o valor do produto!',
+    'number.empty': 'Valor não pode ser um campo vazio.'
+  }),
+  categoria_id: joi.string().required().messages({
+    'any.required': 'É obrigatório informar o ID da categoria!',
+    'string.empty': 'categoria_id não pode ser um campo vazio.'
+  })
+})
+
+module.exports = { 
+  schemaUsuario, 
+  schemaLogin,
+  schemaProdutos
+}

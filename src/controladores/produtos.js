@@ -1,5 +1,24 @@
 const knex = require('knex')
 
+const cadastrarProduto = async(req, res) => {
+const {descricao, quantidade_estoque, valor, categoria_id} = req.body
+
+if (categoria_id <=0 || categoria_id > 8){
+return res.status(404).json({mensagem: "A categoria informada não existe!"})
+}
+
+try {
+  await knex('produtos').insert({
+    descricao, quantidade_estoque, valor, categoria_id
+  })
+
+  return res.status(201).json({mensagem: "O produto foi cadastrado com sucesso!"})
+  
+} catch (error) {
+  return res.status(500).json({mensagem: `Erro interno: ${error.menssage}`})
+}
+}
+
 const listarProduto = async(req, res) =>{
     const {categoria_id} = req.query
 
@@ -41,13 +60,14 @@ const deletarProdutoPorId = async (req, res) => {
 
     return res.status(200).json({ mensagem: 'Produto deletado com sucesso' })
   } catch (error) {
-    return res.status(400).json({ mensagem: error.message })
+    return res.status(500).json({mensagem: `Erro interno: ${error.menssage}`})
   }
 }
 
 
 
 module.exports = {
+  cadastrarProduto,
     listarProduto,
     deletarProdutoPorId
 }
