@@ -32,8 +32,8 @@ rotas.get('/cliente', listarClientes)
 rotas.get('/cliente/:id', detalharCliente)
 
 // Produtos
+rotas.get('produtos', listarProduto)
 rotas.delete('/produto/:id', deletarProdutoPorId)
 
-rotas.get('produtos', listarProduto)
 
 module.exports = rotas
