@@ -10,6 +10,8 @@ const login = require('./controladores/login')
 const autenticarUsuario = require('./filtros/autenticacao_de_usuario')
 const { schemaUsuario, schemaLogin } = require('./validações/schemaUsuario')
 const validarSchema = require('./intermediarios/validacarSchema')
+const { deletarProdutoPorId } = require('./controladores/produtos')
+const { detalharCliente, listarClientes } = require('./controladores/clientes')
 const rotas = Router()
 
 rotas.get('/', (req, res) => {
@@ -25,5 +27,14 @@ rotas.use(autenticarUsuario)
 
 rotas.get('/usuario', detalharDadosPerfilUsuario)
 rotas.put('/usuario', validarSchema(schemaUsuario), editarUsuario)
+
+// SPRINT 2
+
+// Clientes
+rotas.get('/cliente', listarClientes)
+rotas.get('/cliente/:id', detalharCliente)
+
+// Produtos
+rotas.delete('/produto/:id', deletarProdutoPorId)
 
 module.exports = rotas
