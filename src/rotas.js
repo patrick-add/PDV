@@ -1,14 +1,11 @@
 const path = require('path')
 const { Router } = require('express')
 const { listarCategorias } = require('./controladores/categorias')
-const {
-  cadastroDeUsuario,
-  editarUsuario,
-  detalharDadosPerfilUsuario
-} = require('./controladores/usuarios')
+const { cadastroDeUsuario, editarUsuario,detalharDadosPerfilUsuario} = require('./controladores/usuarios')
+const { listarProduto, cadastrarProduto } = require('./controladores/produtos')
 const login = require('./controladores/login')
 const autenticarUsuario = require('./filtros/autenticacao_de_usuario')
-const { schemaUsuario, schemaLogin } = require('./validações/schemaUsuario')
+const { schemaUsuario, schemaLogin, schemaProdutos } = require('./validações/schemaUsuario')
 const validarSchema = require('./intermediarios/validacarSchema')
 const { deletarProdutoPorId } = require('./controladores/produtos')
 const { detalharCliente, listarClientes } = require('./controladores/clientes')
@@ -35,6 +32,9 @@ rotas.get('/cliente', listarClientes)
 rotas.get('/cliente/:id', detalharCliente)
 
 // Produtos
+rotas.post('/produto', validarSchema(schemaProdutos), cadastrarProduto)
+rotas.get('/produto', listarProduto)
 rotas.delete('/produto/:id', deletarProdutoPorId)
+
 
 module.exports = rotas
