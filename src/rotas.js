@@ -8,7 +8,7 @@ const autenticarUsuario = require('./filtros/autenticacao_de_usuario')
 const { schemaUsuario, schemaLogin, schemaProdutos } = require('./validações/schemaUsuario')
 const validarSchema = require('./intermediarios/validacarSchema')
 const { deletarProdutoPorId } = require('./controladores/produtos')
-const { detalharCliente, listarClientes } = require('./controladores/clientes')
+const { detalharCliente, listarClientes, cadastrarCliente } = require('./controladores/clientes')
 const rotas = Router()
 
 rotas.get('/', (req, res) => {
@@ -30,12 +30,12 @@ rotas.put('/usuario', validarSchema(schemaUsuario), editarUsuario)
 // Clientes
 rotas.get('/cliente', listarClientes)
 rotas.get('/cliente/:id', detalharCliente)
+rotas.post('/cliente', cadastrarCliente)
 
 // Produtos
 rotas.post('/produto', validarSchema(schemaProdutos), cadastrarProduto)
 rotas.get('/produto', listarProduto)
 rotas.delete('/produto/:id', deletarProdutoPorId)
 rotas.put('/produto/:id', editarDadosProduto)
-
 
 module.exports = rotas
