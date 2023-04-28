@@ -39,5 +39,4 @@ rotas.get('/produto', listarProduto)
 rotas.delete('/produto/:id', deletarProdutoPorId)
 rotas.put('/produto/:id', editarDadosProduto)
 
-
 module.exports = rotas
