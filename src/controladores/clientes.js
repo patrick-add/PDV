@@ -86,8 +86,53 @@ const cadastrarCliente = async (req, res) => {
   }
 }
 
+const editarDadosCliente = async (req, res) => {
+  let { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body;
+  const { id } = req.params;
+  let query = `update clientes set nome = '${nome}', email = '${email}', cpf = '${cpf}'`;
+  let array = [cep, rua, numero, bairro, cidade, estado];
+  const identificacaoDado = ['cep', "rua", "numero", "bairro", "cidade", "estado"];
+
+  if (!nome || !email || !cpf) {
+    return res.status(404).json({ message: 'Os campos nome, email e cpf são obrigatórios.' })
+  }
+
+  try {
+    const validarIdCliente = await knex('clientes').where({ id }).first();
+    const validarEmail = await knex('clientes').where({ email }).first();
+    const validarCpf = await knex('clientes').where({ cpf }).first();
+
+    if (!validarIdCliente) {
+      return res.status(404).json({ mensagem: 'O id informado não existe' });
+    }
+    if (validarEmail && validarEmail.id !== validarIdCliente.id) {
+      return res.status(404).json({ mensagem: 'O email informado já está sendo utilizado' });
+    }
+    if (validarCpf && validarCpf.id !== validarIdCliente.id) {
+      return res.status(404).json({ mensagem: 'CPF informado já está sendo utilizado' });
+    }
+
+
+    for (let i = 0; i < array.length; i++) {
+      if (array[i] !== undefined) {
+        query += `, ${identificacaoDado[i]} = '${array[i]}'`
+      }
+    }
+
+    query += ` where id = ${id}`
+
+    const atualizandoDados = await knex.raw(query)
+
+    return res.status(200).json();
+
+  } catch (error) {
+    return res.status(500).json({ mensagem: error.message })
+  }
+}
+
 module.exports = {
   detalharCliente,
   listarClientes,
-  cadastrarCliente
+  cadastrarCliente,
+  editarDadosCliente
 }
