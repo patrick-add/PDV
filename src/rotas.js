@@ -1,28 +1,14 @@
 const path = require('path')
 const { Router } = require('express')
 const { listarCategorias } = require('./controladores/categorias')
-const {
-  cadastroDeUsuario,
-  editarUsuario,
-  detalharDadosPerfilUsuario
-} = require('./controladores/usuarios')
-const {
-  listarProduto,
-  cadastrarProduto,
-  editarDadosProduto,
-  detalharProduto
-} = require('./controladores/produtos')
+const {cadastroDeUsuario, editarUsuario, detalharDadosPerfilUsuario} = require('./controladores/usuarios')
+const { listarProduto, cadastrarProduto, editarDadosProduto,detalharProduto} = require('./controladores/produtos')
 const login = require('./controladores/login')
-const autenticarUsuario = require('./filtros/autenticacao_de_usuario')
-const { schemaUsuario, schemaLogin, schemaProdutos } = require('./validações/schemaUsuario')
+const autenticarUsuario = require('./validações/autenticacao_de_usuario')
+const { schemaUsuario, schemaLogin, schemaProdutos } = require('./utils/schemas')
 const validarSchema = require('./intermediarios/validarSchema')
 const { deletarProdutoPorId } = require('./controladores/produtos')
-const {
-  detalharCliente,
-  listarClientes,
-  cadastrarCliente,
-  editarDadosCliente
-} = require('./controladores/clientes')
+const {detalharCliente,listarClientes,cadastrarCliente,editarDadosCliente} = require('./controladores/clientes')
 const rotas = Router()
 
 rotas.get('/', (req, res) => {
