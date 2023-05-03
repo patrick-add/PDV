@@ -90,46 +90,43 @@ const cadastrarCliente = async (req, res) => {
 }
 
 const editarDadosCliente = async (req, res) => {
-  let { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body;
-  const { id } = req.params;
-  let query = `update clientes set nome = '${nome}', email = '${email}', cpf = '${cpf}'`;
-  let array = [cep, rua, numero, bairro, cidade, estado];
-  const identificacaoDado = ['cep', "rua", "numero", "bairro", "cidade", "estado"];
+  let { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body
+  const { id } = req.params
 
   if (!nome || !email || !cpf) {
     return res.status(404).json({ message: 'Os campos nome, email e cpf são obrigatórios.' })
   }
 
   try {
-    const validarIdCliente = await knex('clientes').where({ id }).first();
-    const validarEmail = await knex('clientes').where({ email }).first();
-    const validarCpf = await knex('clientes').where({ cpf }).first();
+    const validarIdCliente = await knex('clientes').where({ id }).first()
+    const validarEmaileCpf = await knex('clientes').where({ email }).orWhere({ cpf }).debug()
+
+    if (validarEmaileCpf[0] && validarEmaileCpf[0].id !== validarIdCliente.id) {
+      return res.status(404).json({ mensagem: 'O email informado já está sendo utilizado' })
+
+    } else if (validarEmaileCpf[1] && validarEmaileCpf[1].id !== validarIdCliente.id) {
+      return res.status(404).json({ mensagem: 'O cpf informado já está sendo utilizado' })
+    }
 
     if (!validarIdCliente) {
-      return res.status(404).json({ mensagem: 'O id informado não existe' });
-    }
-    if (validarEmail && validarEmail.id !== validarIdCliente.id) {
-      return res.status(404).json({ mensagem: 'O email informado já está sendo utilizado' });
-    }
-    if (validarCpf && validarCpf.id !== validarIdCliente.id) {
-      return res.status(404).json({ mensagem: 'CPF informado já está sendo utilizado' });
+      return res.status(404).json({ mensagem: 'O id informado não existe' })
     }
 
+    await knex('clientes')
+      .update({
+        ...(nome && { nome }),
+        ...(email && { email }),
+        ...(cpf && { cpf }),
+        ...(cep && { cep }),
+        ...(rua && { rua }),
+        ...(numero && { numero }),
+        ...(bairro && { bairro }),
+        ...(cidade && { cidade }),
+        ...(estado && { estado })
+      }).where({ id })
 
-    for (let i = 0; i < array.length; i++) {
-      if (array[i] !== undefined) {
-        query += `, ${identificacaoDado[i]} = '${array[i]}'`
-      }
-    }
-
-    query += ` where id = ${id}`
-
-    const atualizandoDados = await knex.raw(query)
-
-    return res.status(200).json();
-
+    return res.status(200).json()
   } catch (error) {
-    console.error(error)
     return res.status(500).json({ mensagem: 'Erro interno.' })
   }
 }
