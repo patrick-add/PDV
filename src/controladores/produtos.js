@@ -15,7 +15,8 @@ const cadastrarProduto = async (req, res) => {
     return res.status(201).json({ mensagem: "O produto foi cadastrado com sucesso!" })
 
   } catch (error) {
-    return res.status(500).json({ mensagem: `Erro interno: ${error.menssage}` })
+    console.error(error)
+    return res.status(500).json({ mensagem: error.message })
   }
 }
 
@@ -42,7 +43,8 @@ const listarProduto = async (req, res) => {
     return res.status(200).json(listaDeProdutos)
 
   } catch (error) {
-    return res.status(500).json({ mensagem: `Erro interno: ${error.menssage}` })
+    console.error(error)
+    return res.status(500).json({ mensagem: 'Erro interno.' })
   }
 }
 
@@ -60,18 +62,18 @@ const deletarProdutoPorId = async (req, res) => {
 
     return res.status(200).json({ mensagem: 'Produto deletado com sucesso' })
   } catch (error) {
-    return res.status(500).json({ mensagem: `Erro interno: ${error.menssage}` })
+    console.error(error)
+    return res.status(500).json({ mensagem: 'Erro interno.' })
   }
 }
 
-// Verificar refatoração e reutilização com função de cadastrar produto
-// Verificar pontos de validação do schemaProdutos
+
 const editarDadosProduto = async (req, res) => {
   const { id } = req.params
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body
 
   try {
-    const verifiarPoduto = await knex('produtos').where({ id }).first();
+    const verificarPoduto = await knex('produtos').where({ id }).first();
 
     if (!verifiarPoduto) {
       return res.status(404).json({ mensagem: "Id informado não foi encontrado" })
@@ -88,10 +90,10 @@ const editarDadosProduto = async (req, res) => {
 
     return res.status(200).json(atualizandoProduto);
   } catch (error) {
-    return res.status(500).json({ mensagem: `Erro interno: ${error.menssage}` })
+    console.error(error)
+    return res.status(500).json({ mensagem: 'Erro interno.' })
   }
 }
-
 
 module.exports = {
   cadastrarProduto,

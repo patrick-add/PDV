@@ -15,7 +15,7 @@ const cadastroDeUsuario = async (req, res) => {
 
     const cadastro = await knex('usuarios')
       .insert({ nome, email, senha: criptografia })
-      .returning(['id','nome', 'email'])
+      .returning(['id', 'nome', 'email'])
 
     return res.status(201).json(cadastro[0])
   } catch (error) {
@@ -41,7 +41,7 @@ const editarUsuario = async (req, res) => {
       senha = await bcrypt.hash(senha, 10)
     }
 
- await knex('usuarios').where({ id }).update({ nome, email, senha })
+    await knex('usuarios').where({ id }).update({ nome, email, senha })
 
     return res.status(204).json()
   } catch (error) {
