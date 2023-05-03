@@ -13,7 +13,8 @@ const detalharCliente = async (req, res) => {
 
     return res.status(200).json(cliente)
   } catch (error) {
-    return res.status(400).json({ mensagem: error.message })
+    console.error(error)
+    return res.status(500).json({ mensagem: 'Erro interno.' })
   }
 }
 
@@ -22,7 +23,8 @@ const listarClientes = async (req, res) => {
     const clientes = await knex('clientes')
     return res.status(200).json(clientes)
   } catch (error) {
-    return res.status(400).json({ mensagem: error.message })
+    console.error(error)
+    return res.status(500).json({ mensagem: 'Erro interno.' })
   }
 }
 
@@ -82,7 +84,8 @@ const cadastrarCliente = async (req, res) => {
 
     return res.status(201).json(novoCliente[0])
   } catch (error) {
-    return res.status(500).json({ mensagem: error.message })
+    console.error(error)
+    return res.status(500).json({ mensagem: 'Erro interno.' })
   }
 }
 
@@ -126,7 +129,8 @@ const editarDadosCliente = async (req, res) => {
     return res.status(200).json();
 
   } catch (error) {
-    return res.status(500).json({ mensagem: error.message })
+    console.error(error)
+    return res.status(500).json({ mensagem: 'Erro interno.' })
   }
 }
 

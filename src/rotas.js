@@ -15,7 +15,7 @@ const {
 const login = require('./controladores/login')
 const autenticarUsuario = require('./filtros/autenticacao_de_usuario')
 const { schemaUsuario, schemaLogin, schemaProdutos } = require('./validações/schemaUsuario')
-const validarSchema = require('./intermediarios/validacarSchema')
+const validarSchema = require('./intermediarios/validarSchema')
 const { deletarProdutoPorId } = require('./controladores/produtos')
 const {
   detalharCliente,

@@ -6,7 +6,8 @@ const validarSchema = (joiSchemaUsuario) => async (req, res, next) => {
 
     next()
   } catch (error) {
-    return res.status(422).json(error.message)
+    console.error(error)
+    return res.status(422).json({ mensagem: error.message })
   }
 }
 
