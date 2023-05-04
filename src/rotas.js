@@ -1,28 +1,13 @@
 const path = require('path')
 const { Router } = require('express')
 const { listarCategorias } = require('./controladores/categorias')
-const {
-  cadastroDeUsuario,
-  editarUsuario,
-  detalharDadosPerfilUsuario
-} = require('./controladores/usuarios')
-const {
-  listarProduto,
-  cadastrarProduto,
-  editarDadosProduto,
-  detalharProduto
-} = require('./controladores/produtos')
+const {cadastroDeUsuario, editarUsuario, detalharDadosPerfilUsuario} = require('./controladores/usuarios')
+const { listarProduto, cadastrarProduto,  editarDadosProduto,detalharProduto, deletarProdutoPorId} = require('./controladores/produtos')
 const login = require('./controladores/login')
-const autenticarUsuario = require('./filtros/autenticacao_de_usuario')
-const { schemaUsuario, schemaLogin, schemaProdutos } = require('./validações/schemaUsuario')
-const validarSchema = require('./intermediarios/validarSchema')
-const { deletarProdutoPorId } = require('./controladores/produtos')
-const {
-  detalharCliente,
-  listarClientes,
-  cadastrarCliente,
-  editarDadosCliente
-} = require('./controladores/clientes')
+const autenticarUsuario = require('./validações/autenticacao_de_usuario')
+const { schemaUsuario, schemaLogin, schemaProdutos, schemaParams } = require('./utils/schemas')
+const {validarSchema, validarSchemaParams}= require('./intermediarios/validarSchema')
+const {detalharCliente,listarClientes,cadastrarCliente,editarDadosCliente} = require('./controladores/clientes')
 const rotas = Router()
 
 rotas.get('/', (req, res) => {
@@ -51,7 +36,7 @@ rotas.put('/cliente/:id', editarDadosCliente)
 rotas.post('/produto', validarSchema(schemaProdutos), cadastrarProduto)
 rotas.get('/produto', listarProduto)
 rotas.delete('/produto/:id', deletarProdutoPorId)
-rotas.put('/produto/:id', editarDadosProduto)
-rotas.get('/produto/:id', detalharProduto)
+rotas.put('/produto/:id', validarSchema(schemaProdutos), validarSchemaParams(schemaParams), editarDadosProduto)
+rotas.get('/produto/:id', validarSchemaParams(schemaParams), detalharProduto)
 
 module.exports = rotas

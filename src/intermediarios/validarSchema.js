@@ -1,14 +1,28 @@
 const knex = require('../conexao')
 
-const validarSchema = (joiSchemaUsuario) => async (req, res, next) => {
+const validarSchema = (joiSchemas) => async (req, res, next) => {
   try {
-    await joiSchemaUsuario.validateAsync(req.body)
+    await joiSchemas.validateAsync(req.body)
 
     next()
   } catch (error) {
-    console.error(error)
-    return res.status(422).json({ mensagem: error.message })
+    return res.status(400).json({ mensagem: error.message })
   }
 }
 
-module.exports = validarSchema
+const validarSchemaParams = (joiSchemaProduto) => async (req, res, next) => {
+
+  try {
+    await joiSchemaProduto.validateAsync(req.params)
+
+    next()
+
+  } catch (error) {
+    return res.status(400).json({ mensagem: error.message })
+  }
+}
+
+module.exports = {
+  validarSchema,
+  validarSchemaParams
+}
