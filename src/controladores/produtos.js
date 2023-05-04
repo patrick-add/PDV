@@ -1,24 +1,23 @@
 const knex = require('../conexao')
+const { validarCategoria, validarProduto} = require('../utils/functions')
 
 const cadastrarProduto = async (req, res) => {
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body
 
-  if (categoria_id <= 0 || categoria_id > 8) {
-    return res.status(404).json({ mensagem: 'A categoria informada não existe!' })
-  }
+  validarCategoria(req, res, categoria_id)
 
   try {
-    await knex('produtos').insert({
+     const produto = await knex('produtos').insert({
       descricao,
       quantidade_estoque,
       valor,
       categoria_id
-    })
+    }).returning('*')
 
-    return res.status(201).json({ mensagem: 'O produto foi cadastrado com sucesso!' })
+    return res.status(201).json({ mensagem: "O produto foi cadastrado com sucesso!", produto: produto[0] })
   } catch (error) {
     console.error(error)
-    return res.status(500).json({ mensagem: error.message })
+    return res.status(500).json({ mensagem: "Erro interno." })
   }
 }
 
@@ -26,15 +25,17 @@ const listarProduto = async (req, res) => {
   const { categoria_id } = req.query
 
   try {
-    if (categoria_id && Number(categoria_id) >= 1 && Number(categoria_id) <= 8) {
+    if (categoria_id) {
+      validarCategoria(req, res, categoria_id)
+
       const categoriasDeProduto = await knex('produtos').where({ categoria_id })
 
-      if (!categoriasDeProduto) {
+      if (!categoriasDeProduto[0]) {
         return res.status(404).json({
           mensagem: 'Não encotramos nenhum produto cadastrado para a categoria informada.'
         })
       } else {
-        return res.staus(200).json(categoriasDeProduto)
+        return res.status(200).json(categoriasDeProduto)
       }
     }
 
@@ -43,7 +44,7 @@ const listarProduto = async (req, res) => {
     return res.status(200).json(listaDeProdutos)
   } catch (error) {
     console.error(error)
-    return res.status(500).json({ mensagem: 'Erro interno.' })
+    return res.status(500).json({ mensagem: "Erro interno." })
   }
 }
 
@@ -54,15 +55,15 @@ const deletarProdutoPorId = async (req, res) => {
     const produto = await knex('produtos').where({ id }).first()
 
     if (!produto) {
-      return res.status(404).json({ mensagem: 'Produto não encontrado' })
+      return res.status(404).json({ mensagem: "Produto não encontrado" })
     }
 
     await knex('produtos').where({ id }).del()
 
-    return res.status(200).json({ mensagem: 'Produto deletado com sucesso' })
+    return res.status(200).json({ mensagem: "Produto deletado com sucesso" })
   } catch (error) {
     console.error(error)
-    return res.status(500).json({ mensagem: 'Erro interno.' })
+    return res.status(500).json({ mensagem: "Erro interno." })
   }
 }
 
@@ -72,21 +73,12 @@ const editarDadosProduto = async (req, res) => {
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body
 
   try {
-    const verifiarPoduto = await knex('produtos').where({ id }).first()
+    validarCategoria(req, res, categoria_id)
 
-    if (!verifiarPoduto) {
-      return res.status(404).json({ mensagem: 'Id informado não foi encontrado' })
-    }
+    const produto = await validarProduto(req, res, id)
 
-    if (!descricao || !quantidade_estoque || !valor || !categoria_id) {
-      return res
-        .status(404)
-        .json({
-          mensagem: 'Os campos descricao, quantidade_estoque, valor e categoria_id são obrigatórios'
-        })
-    }
-    if (categoria_id <= 0 || categoria_id > 8) {
-      return res.status(404).json({ mensagem: 'A categoria informada não existe!' })
+    if (!produto) {
+      return res.status(404).json({ mensagem: "Produto não encontrado." })
     }
 
     const atualizandoProduto = await knex('produtos')
@@ -94,10 +86,11 @@ const editarDadosProduto = async (req, res) => {
       .where({ id })
       .returning('*')
 
-    return res.status(200).json(atualizandoProduto)
+    return res.status(200).json({mensagem: "Produto atualizado com sucesso!",
+  produto: atualizandoProduto[0]})
   } catch (error) {
     console.error(error)
-    return res.status(500).json({ mensagem: 'Erro interno.' })
+    return res.status(500).json({ mensagem: "Erro interno." })
   }
 }
 
@@ -105,16 +98,18 @@ const detalharProduto = async (req, res) => {
   const { id } = req.params
 
   try {
-    const produto = await knex('produtos').where({ id }).first()
+    const produto = await validarProduto(req, res, id)
 
-    if (!produto) {
-      return res.status(404).json({ mensagem: 'Produto não encontrado' })
+    if (!produto){
+      return res.status(404).json({ mensagem: "Produto não encontrado." })
     }
 
-    return res.status(200).json(produto)
+  return res.status(200).json(produto)
+
   } catch (error) {
-    return res.status(500).json({ mensagem: `Erro interno: ${error.menssage}` })
-  }
+    console.error(error)
+    return res.status(500).json({ mensagem: "Erro interno." })
+  } 
 }
 
 module.exports = {
