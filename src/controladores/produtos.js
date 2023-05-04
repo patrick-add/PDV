@@ -121,9 +121,7 @@ async function validateParams({ id: produto_id }) {
     return { mensagem: 'Produto informado não existe.', status: 404 }
   }
 
-  return {
-    produto
-  }
+  return { produto }
 }
 async function validateFK({ categoria_id }) {
   const categoria = categoria_id && (await knex('categorias').where({ id: categoria_id }).first())
@@ -132,9 +130,7 @@ async function validateFK({ categoria_id }) {
     return { mensagem: 'Categoria informada não existe.', status: 404 }
   }
 
-  return {
-    categoria
-  }
+  return { categoria }
 }
 
 module.exports = {
