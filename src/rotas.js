@@ -5,7 +5,7 @@ const { cadastroDeUsuario, editarUsuario,detalharDadosPerfilUsuario } = require(
 const { listarProduto, cadastrarProduto, editarDadosProduto, detalharProduto, deletarProdutoPorId } = require('./controladores/produtos')
 const login = require('./controladores/login')
 const autenticarUsuario = require('./validações/autenticacao_de_usuario')
-const { schemaUsuario, schemaLogin, schemaProdutos, schemaParams } = require('./utils/schemas')
+const { schemaUsuario, schemaLogin, schemaProdutos, schemaClietes } = require('./utils/schemas')
 const { validarSchema } = require('./intermediarios/validarSchema')
 const { detalharCliente, listarClientes, cadastrarCliente, editarDadosCliente } = require('./controladores/clientes')
 
@@ -30,7 +30,7 @@ rotas.put('/usuario', validarSchema(schemaUsuario), editarUsuario)
 // Clientes
 rotas.get('/cliente', listarClientes)
 rotas.get('/cliente/:id', detalharCliente)
-rotas.post('/cliente', cadastrarCliente)
+rotas.post('/cliente', validarSchema(schemaClietes), cadastrarCliente)
 rotas.put('/cliente/:id', editarDadosCliente)
 
 // Produtos

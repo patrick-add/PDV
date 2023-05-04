@@ -33,7 +33,7 @@ create table
         nome varchar(50) not null,
         email text unique not null,
         cpf char(11) unique not null,
-        cep char(8),
+        cep char(8) not null,
         rua varchar(50),
         numero varchar(20),
         bairro varchar(50),
