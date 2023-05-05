@@ -1,6 +1,7 @@
 const path = require('path')
 const { Router } = require('express')
 const { listarCategorias } = require('./controladores/categorias')
+
 const { cadastroDeUsuario, editarUsuario,detalharDadosPerfilUsuario } = require('./controladores/usuarios')
 const { listarProduto, cadastrarProduto, editarDadosProduto, detalharProduto, deletarProdutoPorId } = require('./controladores/produtos')
 const login = require('./controladores/login')

@@ -10,19 +10,5 @@ const validarSchema = (joiSchemas) => async (req, res, next) => {
   }
 }
 
-const validarSchemaParams = (joiSchemaProduto) => async (req, res, next) => {
+module.exports = validarSchema
 
-  try {
-    await joiSchemaProduto.validateAsync(req.params)
-
-    next()
-
-  } catch (error) {
-    return res.status(400).json({ mensagem: error.message })
-  }
-}
-
-module.exports = {
-  validarSchema,
-  validarSchemaParams
-}

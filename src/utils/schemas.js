@@ -15,6 +15,7 @@ const schemaUsuario = joi.object({
   senha: joi.string().trim().min(4).required().messages({
     'any.required': 'É obrigatório informar a senha!',
     'string.empty': 'Senha não pode ser um campo vazio.',
+    'string.base': 'O campo senha deve ser do tipo string.',
     'string.min': 'A senha precisa conter, no mínimo, 4 caracteres.'
   })
 })
