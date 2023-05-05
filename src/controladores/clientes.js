@@ -2,16 +2,14 @@
 const knex = require('../conexao')
 
 const detalharCliente = async (req, res) => {
-  const { id } = req.params
-
   try {
-    const cliente = await knex('clientes').where({ id }).first()
+    const validatePR = await validateParams(req.params)
 
-    if (!cliente) {
-      return res.status(404).json({ mensagem: 'Cliente não encontrado' })
+    if (validatePR.mensagem) {
+      return res.status(validatePR.status).json({ mensagem: validatePR.mensagem })
     }
 
-    return res.status(200).json(cliente)
+    return res.status(200).json(validatePR)
   } catch (error) {
     console.error(error)
     return res.status(500).json({ mensagem: 'Erro interno.' })
@@ -31,12 +29,11 @@ const listarClientes = async (req, res) => {
 const cadastrarCliente = async (req, res) => {
   const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body
 
-// validar se email existe. se sim, retornar erro
   try {
-    const cliente = await knex('clientes').where({ cpf }).first()
+    const validateInfo = await validateFK(req.body)
 
-    if (cliente) {
-      return res.status(400).json({ mensagem: 'O CPF informado ja está cadastrado.' })
+    if (validateInfo.mensagem) {
+      return res.status(validateInfo.status).json({ mensagem: validateInfo.mensagem })
     }
 
     const novoCliente = await knex('clientes')
@@ -63,18 +60,35 @@ const editarDadosCliente = async (req, res) => {
   }
 
   try {
-    const validarIdCliente = await knex('clientes').where({ id }).first()
-    const validarEmaileCpf = await knex('clientes').where({ email }).orWhere({ cpf }).debug()
+    const validatePR = await validateParams(req.params)
 
-    if (validarEmaileCpf[0] && validarEmaileCpf[0].id !== validarIdCliente.id) {
-      return res.status(404).json({ mensagem: 'O email informado já está sendo utilizado' })
-    } else if (validarEmaileCpf[1] && validarEmaileCpf[1].id !== validarIdCliente.id) {
-      return res.status(404).json({ mensagem: 'O cpf informado já está sendo utilizado' })
+    if (validatePR.mensagem) {
+      return res.status(validatePR.status).json({ mensagem: validatePR.mensagem })
     }
 
-    if (!validarIdCliente) {
-      return res.status(404).json({ mensagem: 'O id informado não existe' })
+
+    if (validatePR.cliente.email !== email || validatePR.cliente.cpf !== cpf) {
+      const validateInfo = await validateFK(req.body)
+
+      return res.status(validateInfo.status).json({ mensagem: validateInfo.mensagem })
     }
+
+
+
+
+    // const validarIdCliente = await knex('clientes').where({ id }).first()
+    // const validarEmaileCpf = await knex('clientes').where({ email }).orWhere({ cpf })
+
+    // if (validarEmaileCpf[0] && validarEmaileCpf[0].id !== validarIdCliente.id) {
+    //   return res.status(404).json({ mensagem: 'O email informado já está sendo utilizado' })
+    // } else if (validarEmaileCpf[1] && validarEmaileCpf[1].id !== validarIdCliente.id) {
+    //   return res.status(404).json({ mensagem: 'O cpf informado já está sendo utilizado' })
+    // }
+
+    // if (!validarIdCliente) {
+    //   return res.status(404).json({ mensagem: 'O id informado não existe' })
+    // }
+
 
     await knex('clientes')
       .update({
@@ -92,8 +106,33 @@ const editarDadosCliente = async (req, res) => {
 
     return res.status(200).json()
   } catch (error) {
+    console.error(error)
     return res.status(500).json({ mensagem: 'Erro interno.' })
   }
+}
+
+async function validateParams({ id: cliente_id }) {
+  const cliente = cliente_id && (await knex('clientes').where({ id: cliente_id }).first())
+
+  if (cliente_id && !cliente) {
+    return { mensagem: 'Cliente informado não existe.', status: 404 }
+  }
+
+  return { cliente }
+}
+
+async function validateFK({ email, cpf }) {
+  const cliente = email && cpf && (await knex('clientes').where({ email }).orWhere({ cpf }))
+
+  if (email && cliente[0] && cliente[0].email == email) {
+    return { mensagem: 'O email infornado já existe.', status: 409 }
+  }
+
+  if (cpf && cliente[1]) {
+    return { mensagem: 'O CPF infornado já existe.', status: 409 }
+  }
+
+  return { cliente }
 }
 
 module.exports = {
