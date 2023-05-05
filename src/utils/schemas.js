@@ -58,12 +58,12 @@ const schemaProdutos = joi.object({
 
 const schemaClietes = joi.object({
   nome: joi.string().required().messages({
-    'any.required': 'É obrigatório informar o nome do cliente!', 
+    'any.required': 'É obrigatório informar o nome do cliente!',
     'string.empty': 'Nome não pode ser um campo vazio.',
     'string.base': 'Nome deve ser um campo do tipo string.'
   }),
   email: joi.string().email().required().messages({
-    'any.required': 'É obrigatório informar o email do cliente!', 
+    'any.required': 'É obrigatório informar o email do cliente!',
     'string.empty': 'Email não pode ser um campo vazio.',
     'string.email': 'O Email informado é inválido.',
     'string.base': 'O Email informado não é válido.'
@@ -80,11 +80,11 @@ const schemaClietes = joi.object({
     'string.length': 'O CEP deve conter 8 caracteres.',
     'string.base': 'CEP deve ser um campo do tipo string.'
   }),
-  // estado: joi.string().regex(/ /).length(2).messages({
-  //   'string.empty': 'Estado não pode ser um campo vazio.',
-  //   'string.length': 'O campo estado deve conter 2 caracteres.',
-  //   'string.pattern.base': 'O estado deve ser informado no formato "UF".'
-  // })
+  estado: joi.string().regex(/[A-Z]/).length(2).messages({
+    'string.empty': 'Estado não pode ser um campo vazio.',
+    'string.length': 'O campo estado deve conter 2 caracteres.',
+    'string.pattern.base': 'O estado deve ser informado no formato UF.'
+  })
 })
 
 
