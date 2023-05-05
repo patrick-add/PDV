@@ -55,15 +55,8 @@ const schemaProdutos = joi.object({
   })
 })
 
-const schemaParams = joi.object({
-  id: joi.number().messages({
-    'number.base': 'O ID deve ser um campo numérico.'
-  })
-})
-
 module.exports = {
   schemaUsuario,
   schemaLogin,
-  schemaProdutos,
-  schemaParams
+  schemaProdutos
 }

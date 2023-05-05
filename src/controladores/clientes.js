@@ -103,7 +103,6 @@ const editarDadosCliente = async (req, res) => {
 
     if (validarEmaileCpf[0] && validarEmaileCpf[0].id !== validarIdCliente.id) {
       return res.status(404).json({ mensagem: 'O email informado já está sendo utilizado' })
-
     } else if (validarEmaileCpf[1] && validarEmaileCpf[1].id !== validarIdCliente.id) {
       return res.status(404).json({ mensagem: 'O cpf informado já está sendo utilizado' })
     }
@@ -123,7 +122,8 @@ const editarDadosCliente = async (req, res) => {
         ...(bairro && { bairro }),
         ...(cidade && { cidade }),
         ...(estado && { estado })
-      }).where({ id })
+      })
+      .where({ id })
 
     return res.status(200).json()
   } catch (error) {
