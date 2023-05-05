@@ -31,42 +31,7 @@ const listarClientes = async (req, res) => {
 const cadastrarCliente = async (req, res) => {
   const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body
 
-  if (!nome) {
-    return res.status(400).json({ mensagem: 'O campo nome é obrigatório' })
-  }
-
-  if (!email) {
-    return res.status(400).json({ mensagem: 'O campo email é obrigatório' })
-  }
-
-  if (!cpf || cpf.length !== 11) {
-    return res.status(400).json({ mensagem: 'O campo cpf é obrigatório ou está inválido' })
-  }
-
-  if (!cep || cep.length !== 8) {
-    return res.status(400).json({ mensagem: 'O campo cep é obrigatório ou está inválido' })
-  }
-
-  if (!rua) {
-    return res.status(400).json({ mensagem: 'O campo rua é obrigatório' })
-  }
-
-  if (!numero) {
-    return res.status(400).json({ mensagem: 'O campo numero é obrigatório' })
-  }
-
-  if (!bairro) {
-    return res.status(400).json({ mensagem: 'O campo bairro é obrigatório' })
-  }
-
-  if (!cidade) {
-    return res.status(400).json({ mensagem: 'O campo cidade é obrigatório' })
-  }
-
-  if (!estado || estado.length !== 2) {
-    return res.status(400).json({ mensagem: 'O campo estado é obrigatório ou inválido' })
-  }
-
+// validar se email existe. se sim, retornar erro
   try {
     const cliente = await knex('clientes').where({ cpf }).first()
 
