@@ -84,6 +84,9 @@ const schemaClientes = joi.object({
     'string.empty': 'Estado não pode ser um campo vazio.',
     'string.length': 'O campo estado deve conter 2 caracteres.',
     'string.pattern.base': 'O estado deve ser informado no formato UF.'
+  }),
+  rua: joi.string().messages({
+    'string.base': 'Rua deve ser um campo do tipo string.' //segue o modelo
   })
 })
 
