@@ -29,8 +29,7 @@ const listarClientes = async (req, res) => {
 };
 
 const cadastrarCliente = async (req, res) => {
-  const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } =
-    req.body;
+  const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body;
 
   try {
     const validateInfo = await validateFK(req.body);
@@ -86,7 +85,7 @@ const editarDadosCliente = async (req, res) => {
       })
       .where({ id });
 
-    return res.status(200).json();
+    return res.status(204).json();
   } catch (error) {
     console.error(error);
     return res.status(500).json({ mensagem: "Erro interno." });
@@ -110,14 +109,14 @@ async function validateFK({ email, cpf }, cliente_id) {
 
   if (
     validateEmail &&
-    ((cliente_id && email && validateEmail.id !== cliente_id) || !cliente_id)
+    ((cliente_id && email && validateEmail.id != cliente_id))
   ) {
     return { mensagem: "O email infornado já existe.", status: 409 };
   }
 
   if (
     validateCpf &&
-    ((cliente_id && cpf && validateCpf.id !== cliente_id) || !cliente_id)
+    ((cliente_id && cpf && validateCpf.id != cliente_id))
   ) {
     return { mensagem: "O CPF infornado já existe.", status: 409 };
   }
