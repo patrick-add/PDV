@@ -1,96 +1,78 @@
 //rever ordem dos controladores e status code do catch
-const knex = require('../conexao')
+const knex = require("../conexao");
 
 const detalharCliente = async (req, res) => {
   try {
-    const validatePR = await validateParams(req.params)
+    const validatePR = await validateParams(req.params);
 
     if (validatePR.mensagem) {
-      return res.status(validatePR.status).json({ mensagem: validatePR.mensagem })
+      return res
+        .status(validatePR.status)
+        .json({ mensagem: validatePR.mensagem });
     }
 
-    return res.status(200).json(validatePR)
+    return res.status(200).json(validatePR);
   } catch (error) {
-    console.error(error)
-    return res.status(500).json({ mensagem: 'Erro interno.' })
+    console.error(error);
+    return res.status(500).json({ mensagem: "Erro interno." });
   }
-}
+};
 
 const listarClientes = async (req, res) => {
   try {
-    const clientes = await knex('clientes')
-    return res.status(200).json(clientes)
+    const clientes = await knex("clientes");
+    return res.status(200).json(clientes);
   } catch (error) {
-    console.error(error)
-    return res.status(500).json({ mensagem: 'Erro interno.' })
+    console.error(error);
+    return res.status(500).json({ mensagem: "Erro interno." });
   }
-}
+};
 
 const cadastrarCliente = async (req, res) => {
-  const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body
+  const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } =
+    req.body;
 
   try {
-    const validateInfo = await validateFK(req.body)
+    const validateInfo = await validateFK(req.body);
 
     if (validateInfo.mensagem) {
-      return res.status(validateInfo.status).json({ mensagem: validateInfo.mensagem })
+      return res
+        .status(validateInfo.status)
+        .json({ mensagem: validateInfo.mensagem });
     }
 
-    const novoCliente = await knex('clientes')
+    const novoCliente = await knex("clientes")
       .insert({ nome, email, cpf, cep, rua, numero, bairro, cidade, estado })
-      .returning('*')
+      .returning("*");
 
     if (!novoCliente) {
-      return res.status(400).json({ mensagem: 'O cliente não foi cadastrado' })
+      return res.status(400).json({ mensagem: "O cliente não foi cadastrado" });
     }
 
-    return res.status(201).json(novoCliente[0])
+    return res.status(201).json(novoCliente[0]);
   } catch (error) {
-    console.error(error)
-    return res.status(500).json({ mensagem: 'Erro interno.' })
+    console.error(error);
+    return res.status(500).json({ mensagem: "Erro interno." });
   }
-}
+};
 
 const editarDadosCliente = async (req, res) => {
-  let { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body
-  const { id } = req.params
-
-  if (!nome || !email || !cpf) {
-    return res.status(404).json({ message: 'Os campos nome, email e cpf são obrigatórios.' })
-  }
+  let { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body;
+  const { id } = req.params;
 
   try {
-    const validatePR = await validateParams(req.params)
-
-    if (validatePR.mensagem) {
-      return res.status(validatePR.status).json({ mensagem: validatePR.mensagem })
+    for (const validate of await Promise.all([
+      validateParams(req.params),
+      validateFK(req.body, id),
+    ])) {
+      if (validate?.mensagem) {
+        return res
+          .status(validate.status)
+          .json({ mensagem: validate.mensagem });
+      }
     }
 
-
-    if (validatePR.cliente.email !== email || validatePR.cliente.cpf !== cpf) {
-      const validateInfo = await validateFK(req.body)
-
-      return res.status(validateInfo.status).json({ mensagem: validateInfo.mensagem })
-    }
-
-
-
-
-    // const validarIdCliente = await knex('clientes').where({ id }).first()
-    // const validarEmaileCpf = await knex('clientes').where({ email }).orWhere({ cpf })
-
-    // if (validarEmaileCpf[0] && validarEmaileCpf[0].id !== validarIdCliente.id) {
-    //   return res.status(404).json({ mensagem: 'O email informado já está sendo utilizado' })
-    // } else if (validarEmaileCpf[1] && validarEmaileCpf[1].id !== validarIdCliente.id) {
-    //   return res.status(404).json({ mensagem: 'O cpf informado já está sendo utilizado' })
-    // }
-
-    // if (!validarIdCliente) {
-    //   return res.status(404).json({ mensagem: 'O id informado não existe' })
-    // }
-
-
-    await knex('clientes')
+    await knex("clientes")
       .update({
         ...(nome && { nome }),
         ...(email && { email }),
@@ -100,44 +82,52 @@ const editarDadosCliente = async (req, res) => {
         ...(numero && { numero }),
         ...(bairro && { bairro }),
         ...(cidade && { cidade }),
-        ...(estado && { estado })
+        ...(estado && { estado }),
       })
-      .where({ id })
+      .where({ id });
 
-    return res.status(200).json()
+    return res.status(200).json();
   } catch (error) {
-    console.error(error)
-    return res.status(500).json({ mensagem: 'Erro interno.' })
+    console.error(error);
+    return res.status(500).json({ mensagem: "Erro interno." });
   }
-}
+};
 
 async function validateParams({ id: cliente_id }) {
-  const cliente = cliente_id && (await knex('clientes').where({ id: cliente_id }).first())
+  const cliente =
+    cliente_id && (await knex("clientes").where({ id: cliente_id }).first());
 
   if (cliente_id && !cliente) {
-    return { mensagem: 'Cliente informado não existe.', status: 404 }
+    return { mensagem: "Cliente informado não existe.", status: 404 };
   }
 
-  return { cliente }
+  return { cliente };
 }
 
-async function validateFK({ email, cpf }) {
-  const cliente = email && cpf && (await knex('clientes').where({ email }).orWhere({ cpf }))
+async function validateFK({ email, cpf }, cliente_id) {
+  const validateEmail = await knex("clientes").where({ email }).first();
+  const validateCpf = await knex("clientes").where({ cpf }).first();
 
-  if (email && cliente[0] && cliente[0].email == email) {
-    return { mensagem: 'O email infornado já existe.', status: 409 }
+  if (
+    validateEmail &&
+    ((cliente_id && email && validateEmail.id !== cliente_id) || !cliente_id)
+  ) {
+    return { mensagem: "O email infornado já existe.", status: 409 };
   }
 
-  if (cpf && cliente[1]) {
-    return { mensagem: 'O CPF infornado já existe.', status: 409 }
+  if (
+    validateCpf &&
+    ((cliente_id && cpf && validateCpf.id !== cliente_id) || !cliente_id)
+  ) {
+    return { mensagem: "O CPF infornado já existe.", status: 409 };
   }
 
-  return { cliente }
+  return {};
 }
 
 module.exports = {
   detalharCliente,
   listarClientes,
   cadastrarCliente,
-  editarDadosCliente
-}
+  editarDadosCliente,
+};

@@ -87,10 +87,30 @@ const schemaClietes = joi.object({
   })
 })
 
+const schemaEditarCliente = joi.object({
+  nome: joi.string().required().messages({
+    'any.required': 'É obrigatório informar o nome do cliente!',
+    'string.empty': 'Nome não pode ser um campo vazio.',
+    'string.base': 'Nome deve ser um campo do tipo string.'
+  }),
+  email: joi.string().email().required().messages({
+    'any.required': 'É obrigatório informar o email do cliente!',
+    'string.empty': 'Email não pode ser um campo vazio.',
+    'string.email': 'O Email informado é inválido.',
+    'string.base': 'O Email informado não é válido.'
+  }),
+  cpf: joi.string().length(11).required().messages({
+    'any.required': 'É obrigatório informar o CPF do cliente!',
+    'string.empty': 'CPF não pode ser um campo vazio.',
+    'string.length': 'O campo CPF deve conter 11 digitos.',
+    'string.base': 'CPF deve ser um campo do tipo string.'
+  })
+})
 
 module.exports = {
   schemaUsuario,
   schemaLogin,
   schemaProdutos,
-  schemaClietes
+  schemaClietes,
+  schemaEditarCliente
 }

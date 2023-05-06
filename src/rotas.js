@@ -2,13 +2,34 @@ const path = require('path')
 const { Router } = require('express')
 const { listarCategorias } = require('./controladores/categorias')
 
-const { cadastroDeUsuario, editarUsuario, detalharDadosPerfilUsuario } = require('./controladores/usuarios')
-const { listarProduto, cadastrarProduto, editarDadosProduto, detalharProduto, deletarProdutoPorId } = require('./controladores/produtos')
+const {
+  cadastroDeUsuario,
+  editarUsuario,
+  detalharDadosPerfilUsuario
+} = require('./controladores/usuarios')
+const {
+  listarProduto,
+  cadastrarProduto,
+  editarDadosProduto,
+  detalharProduto,
+  deletarProdutoPorId
+} = require('./controladores/produtos')
 const login = require('./controladores/login')
 const autenticarUsuario = require('./validações/autenticacao_de_usuario')
-const { schemaUsuario, schemaLogin, schemaProdutos, schemaClietes } = require('./utils/schemas')
+const {
+  schemaUsuario,
+  schemaLogin,
+  schemaProdutos,
+  schemaClietes,
+  schemaEditarCliente
+} = require('./utils/schemas')
 const validarSchema = require('./intermediarios/validarSchema')
-const { detalharCliente, listarClientes, cadastrarCliente, editarDadosCliente } = require('./controladores/clientes')
+const {
+  detalharCliente,
+  listarClientes,
+  cadastrarCliente,
+  editarDadosCliente
+} = require('./controladores/clientes')
 
 const rotas = Router()
 
@@ -32,7 +53,7 @@ rotas.put('/usuario', validarSchema(schemaUsuario), editarUsuario)
 rotas.get('/cliente', listarClientes)
 rotas.get('/cliente/:id', detalharCliente)
 rotas.post('/cliente', validarSchema(schemaClietes), cadastrarCliente)
-rotas.put('/cliente/:id', editarDadosCliente)
+rotas.put('/cliente/:id', validarSchema(schemaEditarCliente), editarDadosCliente)
 
 // Produtos
 rotas.post('/produto', validarSchema(schemaProdutos), cadastrarProduto)
