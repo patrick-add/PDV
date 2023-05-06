@@ -20,8 +20,7 @@ const {
   schemaUsuario,
   schemaLogin,
   schemaProdutos,
-  schemaClietes,
-  schemaEditarCliente
+  schemaClientes
 } = require('./utils/schemas')
 const validarSchema = require('./intermediarios/validarSchema')
 const {
@@ -50,10 +49,10 @@ rotas.put('/usuario', validarSchema(schemaUsuario), editarUsuario)
 // SPRINT 2
 
 // Clientes
+rotas.post('/cliente', validarSchema(schemaClientes), cadastrarCliente)
 rotas.get('/cliente', listarClientes)
 rotas.get('/cliente/:id', detalharCliente)
-rotas.post('/cliente', validarSchema(schemaClietes), cadastrarCliente)
-rotas.put('/cliente/:id', validarSchema(schemaEditarCliente), editarDadosCliente)
+rotas.put('/cliente/:id', validarSchema(schemaClientes), editarDadosCliente)
 
 // Produtos
 rotas.post('/produto', validarSchema(schemaProdutos), cadastrarProduto)
