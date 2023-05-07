@@ -17,7 +17,9 @@ const cadastroDeUsuario = async (req, res) => {
       .insert({ nome, email, senha: criptografia })
       .returning(['id', 'nome', 'email'])
 
-    return res.status(201).json(cadastro[0])
+    return res.status(201).json({ 
+      mensagem: 'Usuário cadastrado com sucesso.',
+      usuario: cadastro[0] })
   } catch (error) {
     console.error(error)
     return res.status(500).json({ mensagem: 'Erro interno.' })

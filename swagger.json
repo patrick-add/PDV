@@ -23,19 +23,21 @@
         "description": "Essa rota tem a finalidade de cadastrar um novo usuario no sistema.",
         "tags": ["Usuarios"],
         "requestBody": {
+          "description": "Objeto JSON que deve ser enviado no corpo da requisição.",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
                   "nome": {
-                    "type": "string"
+                    "type": "string", "description": "Nome de usuario"
                   },
                   "email": {
-                    "type": "string"
+                    "type": "string", "description": "Email válido"
                   },
                   "senha": {
-                    "type": "string"
+                    "type": "string", "description": "Senha válida"
                   }
                 },
                 "example": {
@@ -49,12 +51,13 @@
         },
         "responses": {
           "201": {
-            "description": "Created",
+            "description": "Created: Usuario cadastrado com Successo.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "mensagem": { "type": "string", "description": "Mensagem de Successo" },
                     "id": {
                       "type": "integer",
                       "description": "Número de identificação do usuario."
@@ -67,22 +70,16 @@
             }
           },
           "400": {
-            "description": "É obrigatório informar o nome! || É obrigatório informar o email! || É obrigatório informar o senha!"
+            "description": "É obrigatório informar o nome! || É obrigatório informar o email! || É obrigatório informar a senha!"
           },
           "422": {
             "description": "O email informado não é válido || A senha precisa conter, no mínimo, 4 caracteres."
           },
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "nome": { "type": "string", "description": "Nome de usuario" },
-                  "email": { "type": "string", "description": "Email válido" },
-                  "senha": { "type": "string", "description": "Senha secreta do usuario" }
-                }
-              }
-            }
+          "409": {
+            "description": "Email informado já existe"
+          },
+          "500": {
+            "description": "Erro interno."
           }
         }
       },
@@ -91,19 +88,21 @@
         "security": [{ "bearerAuth": [] }],
         "tags": ["Usuarios"],
         "requestBody": {
+          "description": "Estrutura JSON que deve ser enviada para editar o usuario.",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
                   "nome": {
-                    "type": "string"
+                    "type": "string", "description": "Nome de usuario logado"
                   },
                   "email": {
-                    "type": "string"
+                    "type": "string", "description": "Email válido"
                   },
                   "senha": {
-                    "type": "string"
+                    "type": "string", "description": "Senha válida"
                   }
                 },
                 "example": {
@@ -116,21 +115,12 @@
           }
         },
         "responses": {
-          "204": {
-            "description": "Sem resposta no corpo da requisição."
-          },
-          "400": {
-            "description": "É obrigatório informar o nome! || É obrigatório informar o email! || É obrigatório informar o senha!"
-          },
-          "404": {
-            "description": "O email informado já está em uso"
-          },
-          "401": {
-            "description": "Para acessar este recurso um token de autenticação válido deve ser enviado"
-          }
-        },
-        "422": {
-          "description": "O email informado não é válido || A senha precisa conter, no mínimo, 4 caracteres."
+          "204": { "description": "No body: Sem resposta no corpo da requisição." },
+          "400": { "description": "É obrigatório informar o nome! || É obrigatório informar o email! || É obrigatório informar a senha!"},
+          "409": { "description": "Email informado já existe" },
+          "401": { "description": "Para acessar este recurso um token de autenticação válido deve ser enviado || Acesso não autorizado!" },
+          "422": { "description": "O email informado não é válido || A senha precisa conter, no mínimo, 4 caracteres." },
+          "500": { "description": "Erro interno." }
         }
       },
       "get": {
@@ -139,15 +129,14 @@
         "tags": ["Usuarios"],
         "responses": {
           "200": {
+            "description": "Successs: Detalhes do usuario logado.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "id": {
-                      "type": "integer",
-                      "description": "Número de identificação do usuario."
-                    },
+                      "type": "integer", "description": "Número de identificação do usuario."},
                     "nome": { "type": "string", "description": "Nome de usuario logado" },
                     "email": { "type": "string", "description": "Email de usuario logado" }
                   }
@@ -155,10 +144,8 @@
               }
             }
           },
-          "401": {
-            "description": "Para acessar este recurso um token de autenticação válido deve ser enviado"
-          },
-          "500": { "description": "Erro interno." }
+          "401": {"description": "Para acessar este recurso um token de autenticação válido deve ser enviado || Acesso não autorizado!"},
+          "500": {"description": "Erro interno." }
         }
       }
     },
@@ -168,16 +155,18 @@
         "description": "Essa rota tem a finalidade de logar um usuario no sistema.",
         "tags": ["Usuarios"],
         "requestBody": {
+          "description": "Estrutura JSON que deve ser enviada para realizar o login.",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
                   "email": {
-                    "type": "string"
+                    "type": "string", "description": "Email válido"
                   },
                   "senha": {
-                    "type": "string"
+                    "type": "string", "description": "Senha válida"
                   }
                 },
                 "example": {
@@ -190,7 +179,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "Successs: Usuario logado.",
             "content": {
               "application/json": {
                 "schema": {
@@ -203,18 +192,16 @@
                     },
                     "nome": { "type": "string", "description": "Nome de usuario" },
                     "email": { "type": "string", "description": "Email válido" },
-                    "token": { "type": "string", "description": "jwt" }
+                    "token": { "type": "string", "description": "Token de acesso" }
                   }
                 }
               }
             }
           },
-          "400": {
-            "description": "É obrigatório informar o email! || É obrigatório informar o senha!"
-          },
-          "422": {
-            "description": "O email informado não é válido. || A senha precisa conter, no mínimo, 4 caracteres."
-          }
+          "400": { "description": "É obrigatório informar o email! || É obrigatório informar a senha!" },
+          "401": { "description": "Email ou senha inválidos" },
+          "422": { "description": "O email informado não é válido. || A senha precisa conter, no mínimo, 4 caracteres."},
+          "500": { "description": "Erro interno." }
         }
       }
     },
@@ -225,7 +212,7 @@
         "tags": ["Categorias"],
         "responses": {
           "200": {
-            "description": "Lista de categorias cadastradas.",
+            "description": " Success: Lista de categorias cadastradas.",
             "content": {
               "application/json": {
                 "schema": {
@@ -249,6 +236,8 @@
         "security": [{ "bearerAuth": [] }],
         "tags": ["Clientes"],
         "requestBody": {
+          "description": "Estrutura JSON que deve ser enviada para cadastrar um novo cliente.",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
@@ -298,18 +287,18 @@
                   "email": "sandy_bochechas@gmail.com",
                   "cpf": "00000000000",
                   "cep": "00000000",
-                  "rua": "Rua da Areia",
-                  "numero": "666", 
-                  "bairro": " Ilhas Marshall",
+                  "rua": "Rua do Balde de Lixo",
+                  "numero": "66", 
+                  "bairro": "Oceano Pacífico",
                   "cidade": "Fenda do Biquini",
-                  "estado": "Oceano Pacífico"
+                  "estado": "BB"
                 }
               }
             }
           },
           "responses": {
             "201": {
-              "description": "Cliente cadastrado com sucesso.",
+              "description": "Cliente cadastrado com Successo.",
               "content": {
                 "application/json": {
                   "schema": {
@@ -339,6 +328,7 @@
                 }
               }
             },
+            "401": { "description": "Acesso não autorizado!" },
             "500": { "description": "Erro interno." }
           }
       },
@@ -369,6 +359,7 @@
               }
             }
           },
+          "401": { "description": "Para acessar este recurso um token de autenticação válido deve ser enviado || Acesso não autorizado!" },
           "500": { "description": "Erro interno." }
         }
       }
@@ -381,7 +372,7 @@
         "tags": ["Clientes"],
         "parameters": [
           {
-            "in": "path",
+            "in": "params",
             "name": "id",
             "description": "Identificação do cliente",
             "required": true,
@@ -412,7 +403,9 @@
                 }
               }
             }
-          }
+          },
+          "401": { "description": "Para acessar este recurso um token de autenticação válido deve ser enviado || Acesso não autorizado!" },
+          "500": { "description": "Erro interno." }
         }
       },
       "put": {
@@ -421,7 +414,7 @@
         "tags": ["Clientes"],
         "parameters": [
           {
-            "in": "path",
+            "in": "params",
             "name": "id",
             "description": "Identificação do cliente",
             "required": true,
@@ -476,13 +469,252 @@
               }
             }
           },
+          "401": { "description": "Para acessar este recurso um token de autenticação válido deve ser enviado || Acesso não autorizado!" },
           "500": { "description": "Erro interno." }
         }
       }
+},
+"/produto": {
+  "post": {
+    "description": "Essa rota tem a finalidade de cadastrar um produto.",
+    "security": [{ "bearerAuth": [] }],
+    "tags": ["Produtos"],
+    "requestBody": {
+      "description": "Estrutura JSON que deve ser enviada para cadastrar um produto.",
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "descricao": { "type": "string", "description": "Descrição do produto" },
+              "preco": { "type": "integer", "description": "Preço do produto" },
+              "quantidade_estoque": { "type": "integer", "description": "Quantidade do produto em estoque." },
+              "categoria_id": { "type": "integer", "description": "Identificação da categoria do produto." }
+            }
+          },
+          "example": {
+            "descricao": "Hamburguer de Siri",
+            "preco": 500,
+            "quantidade": 100,
+            "categoria_id": 4
+          }
+        }
+      }
+    },
+    "responses": {
+      "201": {
+        "description": "Created: Produto cadastrado com Successo.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": { "type": "string", "description": "Produto cadastrado com Successo." },
+                "produto": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "integer", "description": "Identificação do produto" },
+                    "descricao": { "type": "string", "description": "Descrição do produto" },
+                    "preco": { "type": "integer", "description": "Preço do produto" },
+                    "quantidade_estoque": { "type": "integer", "description": "Quantidade do produto em estoque." },
+                    "categoria_id": { "type": "integer", "description": "Identificação da categoria do produto." }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": { "description": "É obrigatório informar: descricao, preco, quantidade_estoque, categoria_id."},
+      "401": { "description": "Para acessar este recurso um token de autenticação válido deve ser enviado || Acesso não autorizado!" },
+      "500": { "description": "Erro interno." }
+    }
+  },
+  "get":{
+    "description": "Essa rota tem a finalidade de listar todos os produtos de uma categoria especifica.",
+    "security": [{ "bearerAuth": [] }],
+    "tags": ["Produtos"],
+    "parameters": [
+      {
+        "in": "query",
+        "name": "categoria_id",
+        "description": "Identificação da categoria do produto.",
+        "required": false,
+        "schema": {
+          "type": "integer"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Success: Lista de produtos da categoria informada.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": { "type": "integer", "description": "Identificação do produto" },
+                  "descricao": { "type": "string", "description": "Descrição do produto" },
+                  "preco": { "type": "integer", "description": "Preço do produto" },
+                  "quantidade_estoque": { "type": "integer", "description": "Quantidade do produto em estoque." },
+                  "categoria_id": { "type": "integer", "description": "Identificação da categoria do produto." }
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": { "description": "Categoria informada não existe. || Não encotramos nenhum produto cadastrado para a categoria informada." },
+      "401": { "description": "Para acessar este recurso um token de autenticação válido deve ser enviado. || Acesso não autorizado!" },
+      "500": { "description": "Erro interno." }
+    }
+  }
+},
+"/produto/{id}": {
+  "get": {
+    "description": "Essa rota tem a finalidade de listar um produto especifico.",
+    "security": [{ "bearerAuth": [] }],
+    "tags": ["Produtos"],
+    "parameters": [
+      {
+        "in": "path",
+        "name": "id",
+        "description": "Identificação do produto.",
+        "required": true,
+        "schema": {
+          "type": "integer"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Success: Produto encontrado.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "integer", "description": "Identificação do produto" },
+                "descricao": { "type": "string", "description": "Descrição do produto" },
+                "preco": { "type": "integer", "description": "Preço do produto" },
+                "quantidade_estoque": { "type": "integer", "description": "Quantidade do produto em estoque." },
+                "categoria_id": { "type": "integer", "description": "Identificação da categoria do produto." }
+              }
+            }
+          }
+        }
+      },
+      "404": { "description": "Produto informado não existe!" },
+      "401": { "description": "Para acessar este recurso um token de autenticação válido deve ser enviado. || Acesso não autorizado!" },
+      "500": { "description": "Erro interno." }
+    }
+  },
+  "put": {
+    "description": "Essa rota tem a finalidade de atualizar um produto especifico.",
+    "security": [{ "bearerAuth": [] }],
+    "tags": ["Produtos"],
+    "parameters": [
+      {
+        "in": "path",
+        "name": "id",
+        "description": "Identificação do produto.",
+        "required": true,
+        "schema": {
+          "type": "integer"
+        }
+      }
+    ],
+    "requestBody": {
+      "description": "Estrutura JSON que deve ser enviada para atualizar um produto.",
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "descricao": { "type": "string", "description": "Descrição do produto" },
+              "valor": { "type": "integer", "description": "Preço do produto" },
+              "quantidade_estoque": { "type": "integer", "description": "Quantidade do produto em estoque." },
+              "categoria_id": { "type": "integer", "description": "Identificação da categoria do produto." }
+            }
+          },
+          "example": {
+            "descricao": "Batata frita",
+            "preco": 300,
+            "quantidade": 1000,
+            "categoria_id": 4
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success: Produto atualizado com sucesso.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": { "type": "string", "description": "Produto atualizado com sucesso." },
+                "produto": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "integer", "description": "Identificação do produto" },
+                    "descricao": { "type": "string", "description": "Descrição do produto" },
+                    "preco": { "type": "integer", "description": "Preço do produto" },
+                    "quantidade_estoque": { "type": "integer", "description": "Quantidade do produto em estoque." },
+                    "categoria_id": { "type": "integer", "description": "Identificação da categoria do produto."}
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": { "description": "É obrigatório informar: descricao, valor, quantidade_estoque, categoria_id."},
+      "404": { "description": "Produto informado não existe! || Categoria informada não existe!" },
+      "401": { "description": "Para acessar este recurso um token de autenticação válido deve ser enviado. || Acesso não autorizado!" },
+      "500": { "description": "Erro interno." }
+    }
+  },
+  "delete": {
+    "description": "Essa rota tem a finalidade de deletar um produto especifico.",
+    "security": [{ "bearerAuth": [] }],
+    "tags": ["Produtos"],
+    "parameters": [
+      {
+        "in": "path",
+        "name": "id",
+        "description": "Identificação do produto.",
+        "required": true,
+        "schema": {
+          "type": "integer"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Success: Produto deletado com sucesso.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": { "type": "string", "description": "Produto deletado com sucesso." }
+              }
+            }
+          }
+        }
+      },
+      "404": { "description": "Produto informado não existe!" },
+      "401": { "description": "Para acessar este recurso um token de autenticação válido deve ser enviado. || Acesso não autorizado!" },
+      "500": { "description": "Erro interno." }
+    }
+  }
 }
 
-
-  
-
-  }
+}
 }

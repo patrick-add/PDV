@@ -9,7 +9,7 @@ const login = async (req, res) => {
     const validarUsuario = await knex('usuarios').where({ email }).first()
 
     if (!validarUsuario) {
-      return res.status(404).json({ mensagem: 'Email ou senha inválido.' })
+      return res.status(401).json({ mensagem: 'Email ou senha inválido.' })
     }
 
     const validarSenha = await bcrypt.compare(senha, validarUsuario.senha)
