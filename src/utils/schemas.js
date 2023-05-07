@@ -86,7 +86,16 @@ const schemaClientes = joi.object({
     'string.pattern.base': 'O estado deve ser informado no formato UF.'
   }),
   rua: joi.string().messages({
-    'string.base': 'Rua deve ser um campo do tipo string.' //segue o modelo
+    'string.base': 'Rua deve ser um campo do tipo string.'
+  }),
+  numero: joi.string().messages({
+    'string.base': 'Número deve ser um campo do tipo string.'
+  }),
+  bairro: joi.string().messages({
+    'string.base': 'Bairro deve ser um campo do tipo string.'
+  }),
+  cidade: joi.string().messages({
+    'string.base': 'Cidade deve ser um campo do tipo string.'
   })
 })
 
