@@ -114,9 +114,10 @@ const detalharProduto = async (req, res) => {
   }
 }
 
-async function validateParams({ id: produto_id }) {
+async function validateParams({id: produto_id }) {
   const produto = produto_id && (await knex('produtos').where({ id: produto_id }).first())
 
+  console.log(produto)
   if (produto_id && !produto) {
     return { mensagem: 'Produto informado não existe.', status: 404 }
   }

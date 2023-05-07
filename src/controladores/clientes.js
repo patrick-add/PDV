@@ -100,11 +100,11 @@ async function validateFK({ email, cpf }, cliente_id) {
   const validateEmail = await knex('clientes').where({ email }).first()
   const validateCpf = await knex('clientes').where({ cpf }).first()
 
-  if (validateEmail && ((cliente_id && email && validateEmail.id !== cliente_id) || !cliente_id)) {
+  if (validateEmail && ((cliente_id && email && validateEmail.id != cliente_id) || !cliente_id)) {
     return { mensagem: 'O email infornado já existe.', status: 409 }
   }
 
-  if (validateCpf && ((cliente_id && cpf && validateCpf.id !== cliente_id) || !cliente_id)) {
+  if (validateCpf && ((cliente_id && cpf && validateCpf.id != cliente_id) || !cliente_id)) {
     return { mensagem: 'O CPF infornado já existe.', status: 409 }
   }
 
