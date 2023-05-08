@@ -5,19 +5,21 @@ const cadastroDeUsuario = async (req, res) => {
   const { nome, email, senha } = req.body
 
   try {
-    const validarSeEmailExiste = await knex('usuarios').where({ email }).first()
+   const validate = await validateFK(req.body)
 
-    if (validarSeEmailExiste) {
-      return res.status(409).json({ mensagem: 'O email informado já existe !' })
-    }
+   if (validate.mensagem) {
+      return res.status(validate.status).json({ mensagem: validate.mensagem })
+   }
 
     const criptografia = await bcrypt.hash(senha, 10)
 
     const cadastro = await knex('usuarios')
       .insert({ nome, email, senha: criptografia })
-      .returning(['id','nome', 'email'])
+      .returning(['id', 'nome', 'email'])
 
-    return res.status(201).json(cadastro[0])
+    return res.status(201).json({ 
+      mensagem: 'Usuário cadastrado com sucesso.',
+      usuario: cadastro[0] })
   } catch (error) {
     console.error(error)
     return res.status(500).json({ mensagem: 'Erro interno.' })
@@ -30,10 +32,10 @@ const editarUsuario = async (req, res) => {
 
   try {
     if (email !== req.usuario.email) {
-      const verificarEmail = await knex('usuarios').where({ email }).first()
+      const validate = await validateFK(req.body)
 
-      if (verificarEmail) {
-        return res.status(404).json('O email informado já está em uso')
+      if (validate.mensagem) {
+         return res.status(validate.status).json({ mensagem: validate.mensagem })
       }
     }
 
@@ -41,7 +43,7 @@ const editarUsuario = async (req, res) => {
       senha = await bcrypt.hash(senha, 10)
     }
 
-    const atualizandoUsuario = await knex('usuarios').where({ id }).update({ nome, email, senha })
+    await knex('usuarios').where({ id }).update({ nome, email, senha })
 
     return res.status(204).json()
   } catch (error) {
@@ -64,6 +66,16 @@ const detalharDadosPerfilUsuario = async (req, res) => {
     console.error(error)
     return res.status(500).json({ mensagem: 'Erro interno.' })
   }
+}
+
+async function validateFK({ email }) {
+  const validateEmail = email && (await knex('usuarios').where({ email }).first())
+
+  if (email && validateEmail) {
+    return { mensagem: 'Email informado já existe.', status: 409 }
+  }
+
+  return { validateEmail }
 }
 
 module.exports = {
