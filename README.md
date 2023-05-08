@@ -68,4 +68,4 @@
 
 ### - Informações: [Pagina Inicial](http://backend-fendadobiquini.me/)
 
-### - Documentação: [API - Fenda do Biquíni](https://easy-puce-sawfish-tie.cyclic.app/api-docs/)
+### - Documentação: [API - Fenda do Biquíni](http://backend-fendadobiquini.me/api-docs/)
