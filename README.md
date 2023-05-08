@@ -19,7 +19,7 @@
 
 #### **Editar usuario:**
 
-- È possivel alterar todos os dados de um usuario cadastrado.
+- É possivel alterar todos os dados de um usuario cadastrado.
 
 #### **Detalhar usuario:**
 
