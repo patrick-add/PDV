@@ -9,8 +9,6 @@
 
 ---
 
----
-
 #### **Realizar cadastro para usuarios:**
 
 - Dados armazenados em banco de dados com senha criptografada.
@@ -29,12 +27,45 @@
 
 #### **Lista de Categorias:**
 
-- Visualização da lista de categorias existentes na API.
+- Visualização da lista de categorias existentes na API. 
 
----
+#### **Realizar cadastro de produtos:**
 
+- Cadastrar um novo produto no sistema.
+
+#### **Editar os dados do produto:**
+
+- Atualizar as informações de um produto cadastrado.
+
+#### **Listagem de produtos:**
+
+- Visualização da lista de produtos cadastrados.
+
+#### **Detalhar um produto:**
+
+- Obter detalhes de um de seus produtos cadastrados.
+
+#### **Excluir um produto:**
+
+- Exclusão por meio do ID de produtos cadastrados.
+
+#### **Realizar cadastro do cliente:**
+
+- Cadastrar um novo cliente no sistema.
+
+#### **Editar os dados dos clientes:**
+
+- Realizar atualização dos dados dos clientes cadastrado.
+
+#### **Listagem de clientes:**
+
+- Listar todos os clientes cadastrados.
+
+#### **Detalhar um cliente:**
+
+- Obtem os detalhes um de seus clientes cadastrados.
 <br>
 
-### - Informações: [Pagina Inicial](https://easy-puce-sawfish-tie.cyclic.app/)
+### - Informações: [Pagina Inicial](http://backend-fendadobiquini.me/)
 
 ### - Documentação: [API - Fenda do Biquíni](https://easy-puce-sawfish-tie.cyclic.app/api-docs/)
