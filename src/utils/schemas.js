@@ -39,15 +39,19 @@ const schemaProdutos = joi.object({
     'any.required': 'É obrigatório informar a descrição do produto!',
     'string.empty': 'Descrição não pode ser um campo vazio.'
   }),
-  quantidade_estoque: joi.number().required().messages({
+  quantidade_estoque: joi.number().required().min(0).integer().messages({
     'any.required': 'É obrigatório informar a quantidade em estoque!',
     'number.base': 'quantidade_estoque deve ser um campo numérico.',
-    'string.empty': 'categoria_id não pode ser um campo vazio.'
+    'string.empty': 'categoria_id não pode ser um campo vazio.',
+    'number.min': 'A quantidade em estoque deve ser no mínimo 0.',
+    'number.integer': 'A quantidade em estoque deve ser um número inteiro.'
   }),
-  valor: joi.number().required().messages({
+  valor: joi.number().required().min(1).integer().messages({
     'any.required': 'É obrigatório informar o valor do produto!',
     'number.base': 'Valor deve ser um campo numérico.',
-    'string.empty': 'categoria_id não pode ser um campo vazio.'
+    'string.empty': 'categoria_id não pode ser um campo vazio.',
+    'number.min': 'O valor do produto deve ser no mínimo 1 centavo.',
+    'number.integer': 'O valor informado não é valido.'
   }),
   categoria_id: joi.number().required().messages({
     'any.required': 'É obrigatório informar o ID da categoria!',
