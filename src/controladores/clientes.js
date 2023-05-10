@@ -1,30 +1,4 @@
-//rever ordem dos controladores e status code do catch
 const knex = require('../conexao')
-
-const detalharCliente = async (req, res) => {
-  try {
-    const validatePR = await validateParams(req.params)
-
-    if (validatePR.mensagem) {
-      return res.status(validatePR.status).json({ mensagem: validatePR.mensagem })
-    }
-
-    return res.status(200).json(validatePR)
-  } catch (error) {
-    console.error(error)
-    return res.status(500).json({ mensagem: 'Erro interno.' })
-  }
-}
-
-const listarClientes = async (req, res) => {
-  try {
-    const clientes = await knex('clientes')
-    return res.status(200).json(clientes)
-  } catch (error) {
-    console.error(error)
-    return res.status(500).json({ mensagem: 'Erro interno.' })
-  }
-}
 
 const cadastrarCliente = async (req, res) => {
   const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body
@@ -80,6 +54,31 @@ const editarDadosCliente = async (req, res) => {
       .where({ id })
 
     return res.status(204).json()
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({ mensagem: 'Erro interno.' })
+  }
+}
+
+const listarClientes = async (req, res) => {
+  try {
+    const clientes = await knex('clientes')
+    return res.status(200).json(clientes)
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({ mensagem: 'Erro interno.' })
+  }
+}
+
+const detalharCliente = async (req, res) => {
+  try {
+    const validatePR = await validateParams(req.params)
+
+    if (validatePR.mensagem) {
+      return res.status(validatePR.status).json({ mensagem: validatePR.mensagem })
+    }
+
+    return res.status(200).json(validatePR)
   } catch (error) {
     console.error(error)
     return res.status(500).json({ mensagem: 'Erro interno.' })
