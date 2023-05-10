@@ -28,6 +28,31 @@ const cadastrarProduto = async (req, res) => {
   }
 }
 
+const editarDadosProduto = async (req, res) => {
+  const { id } = req.params
+  const { descricao, quantidade_estoque, valor, categoria_id } = req.body
+
+  try {
+    for (const validate of await Promise.all([validateFK(req.body), validateParams(req.params)])) {
+      if (validate.mensagem) {
+        return res.status(validate.status).json({ mensagem: validate.mensagem })
+      }
+    }
+
+    const atualizandoProduto = await knex('produtos')
+      .update({ descricao, quantidade_estoque, valor, categoria_id })
+      .where({ id })
+      .returning('*')
+
+    return res
+      .status(200)
+      .json({ mensagem: 'Produto atualizado com sucesso!', produto: atualizandoProduto[0] })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({ mensagem: 'Erro interno.' })
+  }
+}
+
 const listarProduto = async (req, res) => {
   const { categoria_id } = req.query
 
@@ -55,6 +80,21 @@ const listarProduto = async (req, res) => {
   }
 }
 
+const detalharProduto = async (req, res) => {
+  try {
+    const validatePR = await validateParams(req.params)
+
+    if (validatePR.mensagem) {
+      return res.status(validatePR.status).json({ mensagem: validatePR.mensagem })
+    }
+
+    return res.status(200).json(validatePR.produto)
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({ mensagem: 'Erro interno.' })
+  }
+}
+
 const deletarProdutoPorId = async (req, res) => {
   const { id } = req.params
 
@@ -74,47 +114,7 @@ const deletarProdutoPorId = async (req, res) => {
   }
 }
 
-const editarDadosProduto = async (req, res) => {
-  const { id } = req.params
-  const { descricao, quantidade_estoque, valor, categoria_id } = req.body
-
-  try {
-    for (const validate of await Promise.all([validateFK(req.body), validateParams(req.params)])) {
-      if (validate.mensagem) {
-        return res.status(validate.status).json({ mensagem: validate.mensagem })
-      }
-    }
-
-    const atualizandoProduto = await knex('produtos')
-      .update({ descricao, quantidade_estoque, valor, categoria_id })
-      .where({ id })
-      .returning('*')
-
-    return res
-      .status(200)
-      .json({ mensagem: 'Produto atualizado com sucesso!', produto: atualizandoProduto[0] })
-  } catch (error) {
-    console.error(error)
-    return res.status(500).json({ mensagem: 'Erro interno.' })
-  }
-}
-
-const detalharProduto = async (req, res) => {
-  try {
-    const validatePR = await validateParams(req.params)
-
-    if (validatePR.mensagem) {
-      return res.status(validatePR.status).json({ mensagem: validatePR.mensagem })
-    }
-
-    return res.status(200).json(validatePR.produto)
-  } catch (error) {
-    console.error(error)
-    return res.status(500).json({ mensagem: 'Erro interno.' })
-  }
-}
-
-async function validateParams({id: produto_id }) {
+async function validateParams({ id: produto_id }) {
   const produto = produto_id && (await knex('produtos').where({ id: produto_id }).first())
 
   console.log(produto)
@@ -124,6 +124,7 @@ async function validateParams({id: produto_id }) {
 
   return { produto }
 }
+
 async function validateFK({ categoria_id }) {
   const categoria = categoria_id && (await knex('categorias').where({ id: categoria_id }).first())
 
