@@ -24,8 +24,9 @@ create table
         descricao varchar(100) not null,
         quantidade_estoque integer not null,
         valor integer not null,
-        categoria_id integer not null references categorias(id)
+        produto_imagem text
     );
+-- alter table produtos add column produto_imagem text; 3° Sprint
 
 create table
     clientes (
@@ -40,3 +41,4 @@ create table
         cidade varchar(50),
         estado varchar(2)
     );
+
