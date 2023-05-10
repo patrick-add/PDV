@@ -1,7 +1,8 @@
 const knex = require('../conexao')
+const { excluirArquivo } = require('../utils/storage')
 
 const cadastrarProduto = async (req, res) => {
-  const { descricao, quantidade_estoque, valor, categoria_id } = req.body
+  const { descricao, quantidade_estoque, valor, categoria_id, produto_imagem } = req.body
 
   try {
     const validate = await validateFK(req.body)
@@ -15,7 +16,8 @@ const cadastrarProduto = async (req, res) => {
         descricao,
         quantidade_estoque,
         valor,
-        categoria_id
+        categoria_id,
+        produto_imagem
       })
       .returning('*')
 
@@ -105,6 +107,14 @@ const deletarProdutoPorId = async (req, res) => {
       return res.status(validatePR.status).json({ mensagem: validatePR.mensagem })
     }
 
+    if (validatePR.produto.produto_imagem) {
+      const path = validatePR.produto.produto_imagem.split('.com/')[1]
+      await excluirArquivo(path)
+    }
+
+   
+  
+    
     await knex('produtos').where({ id }).del()
 
     return res.status(200).json({ mensagem: 'Produto deletado com sucesso' })
@@ -117,7 +127,6 @@ const deletarProdutoPorId = async (req, res) => {
 async function validateParams({ id: produto_id }) {
   const produto = produto_id && (await knex('produtos').where({ id: produto_id }).first())
 
-  console.log(produto)
   if (produto_id && !produto) {
     return { mensagem: 'Produto informado não existe.', status: 404 }
   }
