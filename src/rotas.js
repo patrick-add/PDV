@@ -10,6 +10,7 @@ const { schemaUsuario, schemaLogin, schemaProdutos, schemaClientes, schemaUpload
 const validarSchema = require('./intermediarios/validarSchema')
 const { detalharCliente, listarClientes, cadastrarCliente, editarDadosCliente } = require('./controladores/clientes')
 const { uploadDeImagem, listarImagens } = require('./controladores/uploads')
+const cadastrarPedido = require('./controladores/pedidos')
 
 const rotas = Router()
 
@@ -45,7 +46,8 @@ rotas.put('/produto/:id', validarSchema(schemaProdutos), editarDadosProduto)
 rotas.get('/produto/:id', detalharProduto)
 
 // SPRINT 3
-rotas.post('/arquivo/upload', multer.single('imagem'), validarSchema(schemaUpload), uploadDeImagem )
+rotas.post('/arquivo/upload', multer.single('imagem'), validarSchema(schemaUpload), uploadDeImagem)
 rotas.get('/arquivo', listarImagens)
+rotas.post('/pedido', cadastrarPedido)
 
 module.exports = rotas
