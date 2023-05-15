@@ -2,23 +2,42 @@ const path = require('path')
 const multer = require('./multer')
 const { Router } = require('express')
 const { listarCategorias } = require('./controladores/categorias')
-const { cadastroDeUsuario, editarUsuario, detalharDadosPerfilUsuario } = require('./controladores/usuarios')
-const { listarProduto, cadastrarProduto, editarDadosProduto, detalharProduto, deletarProdutoPorId } = require('./controladores/produtos')
+const {
+  cadastroDeUsuario,
+  editarUsuario,
+  detalharDadosPerfilUsuario
+} = require('./controladores/usuarios')
+const {
+  listarProduto,
+  cadastrarProduto,
+  editarDadosProduto,
+  detalharProduto,
+  deletarProdutoPorId
+} = require('./controladores/produtos')
 const login = require('./controladores/login')
 const autenticarUsuario = require('./validações/autenticacao_de_usuario')
-const { schemaUsuario, schemaLogin, schemaProdutos, schemaClientes, schemaUpload } = require('./utils/schemas')
+const {
+  schemaUsuario,
+  schemaLogin,
+  schemaProdutos,
+  schemaClientes,
+  schemaUpload
+} = require('./utils/schemas')
 const validarSchema = require('./intermediarios/validarSchema')
-const { detalharCliente, listarClientes, cadastrarCliente, editarDadosCliente } = require('./controladores/clientes')
+const {
+  detalharCliente,
+  listarClientes,
+  cadastrarCliente,
+  editarDadosCliente
+} = require('./controladores/clientes')
 const { uploadDeImagem, listarImagens } = require('./controladores/uploads')
-const cadastrarPedido = require('./controladores/pedidos')
+const { cadastrarPedido } = require('./controladores/pedidos')
 
 const rotas = Router()
 
 rotas.get('/', (req, res) => {
   return res.status(200).sendFile(path.join(__dirname, '../public/pages/index.html'))
 }) // Patrick ve se consegue fazer essa função isolada em outro aqrquivo. vlw
-
-
 
 rotas.get('/categoria', listarCategorias)
 

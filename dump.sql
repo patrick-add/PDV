@@ -26,6 +26,7 @@ create table
         valor integer not null,
         categoria_id integer not null references categorias(id)
     );
+
 -- alter table produtos add column produto_imagem text; 3° Sprint
 
 create table
@@ -42,18 +43,18 @@ create table
         estado varchar(2)
     );
 
-create table 
+create table
     pedidos (
         id serial primary key,
         observacao varchar(100),
         valor_total integer not null
-);
+    );
 
-create table 
+create table
     pedido_produtos (
         id serial primary key,
-        pedido_id   integer not null references pedidos(id),
-        produto_id  integer not null references produtos(id),
-        quantidade_produto  integer not null,
+        pedido_id integer not null references pedidos(id),
+        produto_id integer not null references produtos(id),
+        quantidade_produto integer not null,
         valor_produto integer not null
     );
