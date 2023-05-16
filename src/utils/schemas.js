@@ -58,13 +58,15 @@ const schemaProdutos = joi.object({
     'number.base': 'categoria_id deve ser um campo numérico.',
     'string.empty': 'categoria_id não pode ser um campo vazio.'
   }),
-  produto_imagem: joi.string().messages({
-    'string.base': 'produto_imagem deve ter uma url válida.'
+  produto_imagem: joi.string().uri().optional().allow(null).messages({
+    'string.uri': 'produto_imagem deve ser uma URL válida.',
+    'string.empty': 'produto_imagem não pode ser um campo vazio.',
+    'string.base': 'produto_imagem deve ser um campo do tipo string.'
   })
 })
 
 const schemaClientes = joi.object({
-  nome: joi.string().required().messages({
+  nome: joi.string().required().uri().messages({
     'any.required': 'É obrigatório informar o nome do cliente!',
     'string.empty': 'Nome não pode ser um campo vazio.',
     'string.base': 'Nome deve ser um campo do tipo string.'
@@ -105,7 +107,6 @@ const schemaClientes = joi.object({
     'string.base': 'Cidade deve ser um campo do tipo string.'
   })
 })
-
 
 module.exports = {
   schemaUsuario,

@@ -67,6 +67,41 @@ const cadastrarPedido = async (req, res) => {
   }
 }
 
+const listarPedidos = async (req, res) => {
+  const { cliente_id } = req.query
+  try {
+    const query = cliente_id ? ` where cliente_id = ${cliente_id}` : ``
+    const pedidos = await knex.raw(`select * from pedidos${query}`)
+
+    if (pedidos.rowCount === 0) {
+      return res.status(404).json({ mensagem: 'Nenhum pedido encontrado' })
+    }
+
+    const estrutura = await Promise.all(
+      pedidos.rows.map(async (pedido) => {
+        const pedido_produtos = await knex('pedido_produtos')
+          .where({ pedido_id: pedido.id })
+          .select('*')
+
+        return {
+          pedido: {
+            id: pedido.id,
+            valor_total: pedido.valor_total,
+            observacao: pedido.observacao,
+            cliente_id: pedido.cliente_id
+          },
+          pedido_produtos
+        }
+      })
+    )
+
+    return res.status(200).json(estrutura)
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({ mensagem: 'Erro interno' })
+  }
+}
+
 const enviarEmail = async (nomeEmail, sendEmail) => {
   transportador.sendMail({
     from: `${process.env.EMAIL_NAME} <${process.env.EMAIL_FROM}>`,
@@ -78,5 +113,6 @@ const enviarEmail = async (nomeEmail, sendEmail) => {
 }
 
 module.exports = {
-  cadastrarPedido
+  cadastrarPedido,
+  listarPedidos
 }

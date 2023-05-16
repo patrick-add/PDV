@@ -32,7 +32,7 @@ const cadastrarProduto = async (req, res) => {
 
 const editarDadosProduto = async (req, res) => {
   const { id } = req.params
-  const { descricao, quantidade_estoque, valor, categoria_id } = req.body
+  const { descricao, quantidade_estoque, valor, categoria_id, produto_imagem } = req.body
 
   try {
     for (const validate of await Promise.all([validateFK(req.body), validateParams(req.params)])) {
@@ -41,8 +41,24 @@ const editarDadosProduto = async (req, res) => {
       }
     }
 
+    // const teste = await Promise.all([validateFK(req.body), validateParams(req.params)])
+    // teste.find((validate) => {
+    //   if (validate.mensagem) {
+    //     return res.status(validate.status).json({ mensagem: validate.mensagem })
+    //   }
+    // })
+
+    if (produto_imagem) {
+      const validatePR = await validateParams(req.params)
+
+      if (validatePR.produto.produto_imagem) {
+        const path = validatePR.produto.produto_imagem.split('.com/')[1]
+        await excluirArquivo(path)
+      }
+    }
+
     const atualizandoProduto = await knex('produtos')
-      .update({ descricao, quantidade_estoque, valor, categoria_id })
+      .update({ descricao, quantidade_estoque, valor, categoria_id, produto_imagem })
       .where({ id })
       .returning('*')
 
@@ -112,9 +128,6 @@ const deletarProdutoPorId = async (req, res) => {
       await excluirArquivo(path)
     }
 
-   
-  
-    
     await knex('produtos').where({ id }).del()
 
     return res.status(200).json({ mensagem: 'Produto deletado com sucesso' })

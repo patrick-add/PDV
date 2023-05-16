@@ -31,7 +31,8 @@ const {
   editarDadosCliente
 } = require('./controladores/clientes')
 const { uploadDeImagem, listarImagens } = require('./controladores/uploads')
-const { cadastrarPedido } = require('./controladores/pedidos')
+const { cadastrarPedido, listarPedidos } = require('./controladores/pedidos')
+const excluirProduto = require('./intermediarios/excluirProduto')
 
 const rotas = Router()
 
@@ -60,7 +61,7 @@ rotas.put('/cliente/:id', validarSchema(schemaClientes), editarDadosCliente)
 // Produtos
 rotas.post('/produto', validarSchema(schemaProdutos), cadastrarProduto)
 rotas.get('/produto', listarProduto)
-rotas.delete('/produto/:id', deletarProdutoPorId)
+rotas.delete('/produto/:id', excluirProduto, deletarProdutoPorId)
 rotas.put('/produto/:id', validarSchema(schemaProdutos), editarDadosProduto)
 rotas.get('/produto/:id', detalharProduto)
 
@@ -68,5 +69,6 @@ rotas.get('/produto/:id', detalharProduto)
 rotas.post('/arquivo/upload', multer.single('imagem'), validarSchema(schemaUpload), uploadDeImagem)
 rotas.get('/arquivo', listarImagens)
 rotas.post('/pedido', cadastrarPedido)
+rotas.get('/pedido', listarPedidos)
 
 module.exports = rotas

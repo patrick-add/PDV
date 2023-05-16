@@ -46,6 +46,7 @@ create table
 create table
     pedidos (
         id serial primary key,
+        cliente_id integer not null references clientes(id),
         observacao varchar(100),
         valor_total integer not null
     );
