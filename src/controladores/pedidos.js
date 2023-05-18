@@ -4,6 +4,7 @@ const transportador = require('../email')
 const cadastrarPedido = async (req, res) => {
   const { cliente_id, pedido_produtos, observacao } = req.body
   let total = 0
+
   try {
     if (!cliente_id) {
       return res.status(404).json({ mensagem: 'informe um cliente_id' })

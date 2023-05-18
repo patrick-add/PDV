@@ -108,9 +108,18 @@ const schemaClientes = joi.object({
   })
 })
 
+const schemaUpload = joi.object({
+  imagem: joi.string().uri().optional().allow(null).messages({
+    'string.uri': 'imagem deve ser uma URL válida.',
+    'string.empty': 'imagem não pode ser um campo vazio.',
+    'string.base': 'imagem deve ser um campo do tipo string.'
+  })
+})
+
 module.exports = {
   schemaUsuario,
   schemaLogin,
   schemaProdutos,
-  schemaClientes
+  schemaClientes,
+  schemaUpload
 }
