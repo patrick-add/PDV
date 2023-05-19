@@ -25,7 +25,7 @@ console.log(pedidoAceito)
       await knex('produtos').where({ id: produto.produto_id }).update({ quantidade_estoque:  pedidoAceito.estoque[produto.produto_id]})
     });
 
-    // enviarEmail(pedidoAceito.cliente.nome, pedidoAceito.cliente.email)
+    enviarEmail(pedidoAceito.cliente.nome, pedidoAceito.cliente.email)
 
     return res.status(201).json({ mensagem: 'Pedido enviado com sucesso!', pedido: pedidoAceito.pedido })
   } catch (error) {
