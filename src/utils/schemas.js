@@ -1,9 +1,11 @@
 const joi = require('joi')
 
 const schemaUsuario = joi.object({
-  nome: joi.string().trim().required().messages({
+  nome: joi.string().regex(/^[^0-9]*$/).required().trim().messages({
     'any.required': 'É obrigatório informar o nome!',
-    'string.empty': 'Nome não pode ser um campo vazio.'
+    'string.empty': 'Nome não pode ser um campo vazio.',
+    'string.base': 'Insira um nome válido',
+    'string.pattern.base': 'Insira um nome válido.'
   }),
 
   email: joi.string().email().required().messages({
@@ -35,7 +37,7 @@ const schemaLogin = joi.object({
 })
 
 const schemaProdutos = joi.object({
-  descricao: joi.string().required().messages({
+  descricao: joi.string().trim().required().messages({
     'any.required': 'É obrigatório informar a descrição do produto!',
     'string.empty': 'Descrição não pode ser um campo vazio.'
   }),
@@ -66,10 +68,11 @@ const schemaProdutos = joi.object({
 })
 
 const schemaClientes = joi.object({
-  nome: joi.string().required().uri().messages({
+  nome: joi.string().trim().regex(/^[^0-9]*$/).required().messages({
     'any.required': 'É obrigatório informar o nome do cliente!',
     'string.empty': 'Nome não pode ser um campo vazio.',
-    'string.base': 'Nome deve ser um campo do tipo string.'
+    'string.base': 'Nome deve ser um campo do tipo string.',
+    'string.pattern.base': 'Insira um nome válido.'
   }),
   email: joi.string().email().required().messages({
     'any.required': 'É obrigatório informar o email do cliente!',
@@ -77,19 +80,19 @@ const schemaClientes = joi.object({
     'string.email': 'O Email informado é inválido.',
     'string.base': 'O Email informado não é válido.'
   }),
-  cpf: joi.string().length(11).required().messages({
+  cpf: joi.string().trim().length(11).required().messages({
     'any.required': 'É obrigatório informar o CPF do cliente!',
     'string.empty': 'CPF não pode ser um campo vazio.',
     'string.length': 'O campo CPF deve conter 11 digitos.',
     'string.base': 'CPF deve ser um campo do tipo string.'
   }),
-  cep: joi.string().length(8).required().messages({
+  cep: joi.string().trim().length(8).required().messages({
     'any.required': 'É obrigatório informar o CEP do cliente!',
     'string.empty': 'CEP não pode ser um campo vazio.',
     'string.length': 'O CEP deve conter 8 caracteres.',
     'string.base': 'CEP deve ser um campo do tipo string.'
   }),
-  estado: joi.string().regex(/[A-Z]/).length(2).messages({
+  estado: joi.string().trim().regex(/[A-Z]/).length(2).messages({
     'string.empty': 'Estado não pode ser um campo vazio.',
     'string.length': 'O campo estado deve conter 2 caracteres.',
     'string.pattern.base': 'O estado deve ser informado no formato UF.'
@@ -116,10 +119,38 @@ const schemaUpload = joi.object({
   })
 })
 
+const schemaPedidos = joi.object({
+  cliente_id: joi.number().integer().required().messages({
+    'any.required': 'É obrigatório informar o ID do cliente!',
+    'number.base': 'cliente_id deve ser um campo numérico.',
+    'string.empty': 'cliente_id não pode ser um campo vazio.',
+  }),
+  observacao: joi.string().allow('').messages({
+    'string.base': 'observacao deve ser uma string.',
+  }),
+  pedido_produtos: joi.array().min(1).required().messages({
+    'object.unknown': 'É obrigatório informar os produtos do pedido!',
+    'any.required': 'É obrigatório informar os produtos do pedido!',
+    'array.min': 'É obrigatório informar pelo menos um produto no pedido!'
+  }).items({
+    produto_id: joi.number().integer().required().messages({
+      'any.required': 'É obrigatório informar o ID do produto!',
+      'number.base': 'produto_id deve ser um campo numérico.',
+      'number.empty': 'produto_id não pode ser um campo vazio.',
+    }),
+    quantidade_produto: joi.number().integer().required().messages({
+      'any.required': 'É obrigatório informar a quantidade do produto!',
+      'number.base': 'quantidade deve ser um campo numérico.',
+      'string.empty': 'quantidade não pode ser um campo vazio.',
+    }),
+  })
+})
+
 module.exports = {
   schemaUsuario,
   schemaLogin,
   schemaProdutos,
   schemaClientes,
-  schemaUpload
+  schemaUpload,
+  schemaPedidos
 }

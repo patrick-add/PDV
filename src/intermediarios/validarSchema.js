@@ -2,7 +2,7 @@ const knex = require('../conexao')
 
 const validarSchema = (joiSchemas) => async (req, res, next) => {
   try {
-    await joiSchemas.validateAsync(req.body)
+    req.body = await joiSchemas.validateAsync(req.body)
 
     next()
   } catch (error) {

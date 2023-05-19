@@ -6,7 +6,7 @@ const { cadastroDeUsuario, editarUsuario, detalharDadosPerfilUsuario } = require
 const { listarProduto, cadastrarProduto, editarDadosProduto, detalharProduto, deletarProdutoPorId } = require('./controladores/produtos')
 const login = require('./controladores/login')
 const autenticarUsuario = require('./validações/autenticacao_de_usuario')
-const { schemaUsuario, schemaLogin, schemaProdutos, schemaClientes, schemaUpload } = require('./utils/schemas')
+const { schemaUsuario, schemaLogin, schemaProdutos, schemaClientes, schemaUpload, schemaPedidos } = require('./utils/schemas')
 const validarSchema = require('./intermediarios/validarSchema')
 const { detalharCliente, listarClientes, cadastrarCliente, editarDadosCliente } = require('./controladores/clientes')
 const { uploadDeImagem, listarImagens } = require('./controladores/uploads')
@@ -45,7 +45,7 @@ rotas.get('/produto/:id', detalharProduto)
 // SPRINT 3
 rotas.post('/arquivo/upload', multer.single('imagem'), validarSchema(schemaUpload), uploadDeImagem)
 rotas.get('/arquivo', listarImagens)
-rotas.post('/pedido', cadastrarPedido)
+rotas.post('/pedido', validarSchema(schemaPedidos), cadastrarPedido)
 rotas.get('/pedido', listarPedidos)
 
 module.exports = rotas
