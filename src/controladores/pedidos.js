@@ -8,9 +8,17 @@ const cadastrarPedido = async (req, res) => {
   try {
     const cliente = await knex('clientes').where({ id: cliente_id }).first()
 
+   
+
+
     if (!cliente) {
       return res.status(404).json({ mensagem: 'Cliente informado não existe' })
     }
+
+//     const rato = pedido_produtos.map((produto) => produto.produto_id)
+//     const p = await knex('produtos').where('id', 'in', rato)
+// console.log(p)
+
 
     for (let produto of pedido_produtos) {
       const produtoValidacao = await knex('produtos')

@@ -15,7 +15,7 @@ const excluirProduto = require('./intermediarios/excluirProduto')
 
 const rotas = Router()
 
-rotas.get('/', (req, res) => { return res.status(200).sendFile(path.join(__dirname, '../public/pages/index.html')) }) // Patrick ve se consegue fazer essa função isolada em outro aqrquivo. vlw
+rotas.get('/', (req, res) => { return res.status(200).sendFile(path.join(__dirname, '../public/pages/index.html')) })
 
 rotas.get('/categoria', listarCategorias)
 
