@@ -91,7 +91,7 @@ for(let i = 0; i < arrayIDs.length; i++){
   // console.log(arrayIDs)
   // console.log(produtos[i])
 
-  if(!produtos[i] || produtos[0].id != arrayIDs[i]){  // Verifica se o ID do produto existe no array de IDs
+  if(!produtos[i] || produtos[i].id != arrayIDs[i]){  // Verifica se o ID do produto existe no array de IDs
     return { mensagem: `Produto de id: ${arrayIDs[i]} não existe !`, status: 404 }
   }
 
