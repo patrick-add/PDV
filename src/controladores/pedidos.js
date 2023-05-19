@@ -2,70 +2,36 @@ const knex = require('../conexao')
 const transportador = require('../email')
 
 const cadastrarPedido = async (req, res) => {
-  const { cliente_id, pedido_produtos, observacao } = req.body
-  let total = 0
-
   try {
-    const cliente = await knex('clientes').where({ id: cliente_id }).first()
-
-   
+    const pedidoAceito = await validarPedido(req.body)
 
 
-    if (!cliente) {
-      return res.status(404).json({ mensagem: 'Cliente informado não existe' })
+    if(pedidoAceito.mensagem){
+      return res.status(pedidoAceito.status).json({ mensagem: pedidoAceito.mensagem })
     }
 
-//     const rato = pedido_produtos.map((produto) => produto.produto_id)
-//     const p = await knex('produtos').where('id', 'in', rato)
-// console.log(p)
+    const incluirPedido = await knex('pedidos').insert({ 
+      cliente_id: pedidoAceito.pedido.cliente_id,
+      observacao: pedidoAceito.pedido.observacao,
+      valor_total: pedidoAceito.pedido.valor_total
+    }).returning('*')
 
-
-    for (let produto of pedido_produtos) {
-      const produtoValidacao = await knex('produtos')
-        .where({
-          id: produto.produto_id
-        })
-        .first()
-
-      if (!produtoValidacao) {
-        return res.status(404).json({ mensagem: 'Informe um produto válido' })
-      }
-
-      if (produtoValidacao.quantidade_estoque < produto.quantidade_produto) {
-        return res.status(400).json({ mensagem: 'Quantidade em estoque insuficiente.' })
-      }
-      produto.valor = produtoValidacao.valor
-      total += produto.valor * produto.quantidade_produto
-
-      const atualizarEstoque = await knex('produtos')
-        .where({ id: produto.produto_id })
-        .update({
-          quantidade_estoque: produtoValidacao.quantidade_estoque - produto.quantidade_produto
-        })
-    }
-
-    const cadastro = await knex('pedidos')
-      .insert({
-        cliente_id,
-        ...(observacao && { observacao }),
-        valor_total: total
+    pedidoAceito.pedido_produtos.forEach(async (produto) => {
+      await knex('pedido_produtos').insert({
+      pedido_id: incluirPedido[0].id,
+      produto_id: produto.produto_id,
+      quantidade_produto: produto.quantidade_produto, 
+      valor_produto: produto.valor_produto
       })
-      .returning('*')
-
-    for (let pedido of pedido_produtos) {
-      const pedidoProdutos = await knex('pedido_produtos').insert({
-        pedido_id: cadastro[0].id,
-        produto_id: pedido.produto_id,
-        quantidade_produto: pedido.quantidade_produto,
-        valor_produto: pedido.valor
-      })
-    }
-
-    // enviarEmail(cliente.nome, cliente.email)
-
-    return res.status(201).json({ mensagem: 'passou' })
+      
+      await knex('produtos').where({ id: produto.produto_id }).update({ quantidade_estoque:  100})
+    });
+    
+// enviarEmail(cliente.nome, cliente.email)
+    return res.status(201).json({ mensagem: 'Pedido enviado com sucesso!', pedido: pedidoAceito.pedido })
   } catch (error) {
     console.error(error)
+    return res.status(500).json({ mensagem: 'Erro interno' })
   }
 }
 
@@ -104,6 +70,52 @@ const listarPedidos = async (req, res) => {
   }
 }
 
+const validarPedido = async (pedido) => {
+const { cliente_id, pedido_produtos, observacao } = pedido
+
+const pedidoAceito = {
+  pedido: { cliente_id, observacao, valor_total: 0 },
+  pedido_produtos: []
+  //add quantidade em estoque
+  }
+
+const cliente = await knex('clientes').where({ id: cliente_id }).first()
+if (!cliente) {
+  return { mensagem: 'Cliente informado não existe', status: 404 }
+}
+
+const arrayIDs = pedido_produtos.map((produto) => produto.produto_id).sort() // Array com IDs dos produtos pedidos
+const produtos = await knex('produtos').where('id', 'in', arrayIDs).orderBy('id', 'asc').returning('*') // Busca os produtos do pedido
+
+for(let i = 0; i < arrayIDs.length; i++){
+  // console.log(arrayIDs)
+  // console.log(produtos[i])
+
+  if(!produtos[i] || produtos[0].id != arrayIDs[i]){  // Verifica se o ID do produto existe no array de IDs
+    return { mensagem: `Produto de id: ${arrayIDs[i]} não existe !`, status: 404 }
+  }
+
+  if (produtos[i].quantidade_estoque < pedido_produtos[i].quantidade_produto){
+    return { mensagem: `Quantidade do produto "${produtos[i].descricao}" insuficiente em estoque.`, status: 400 }
+  }
+
+ 
+  pedidoAceito.pedido_produtos.push({
+      produto_id: produtos[i].id,
+      quantidade_produto: pedido_produtos[i].quantidade_produto,
+      valor_produto: produtos[i].valor
+  })
+
+  pedidoAceito.pedido.valor_total += produtos[i].valor * pedido_produtos[i].quantidade_produto
+}
+
+return pedidoAceito
+
+}
+
+
+
+
 const enviarEmail = async (nomeEmail, sendEmail) => {
   transportador.sendMail({
     from: `${process.env.EMAIL_NAME} <${process.env.EMAIL_FROM}>`,
@@ -116,5 +128,6 @@ const enviarEmail = async (nomeEmail, sendEmail) => {
 
 module.exports = {
   cadastrarPedido,
-  listarPedidos
+  listarPedidos,
+  enviarEmail
 }
