@@ -6,14 +6,6 @@ const cadastrarPedido = async (req, res) => {
   let total = 0
 
   try {
-    if (!cliente_id) {
-      return res.status(404).json({ mensagem: 'informe um cliente_id' })
-    }
-
-    if (!pedido_produtos || pedido_produtos.length < 1) {
-      return res.status(404).json({ mensagem: 'Informe ao menos um produto' })
-    }
-
     const cliente = await knex('clientes').where({ id: cliente_id }).first()
 
     if (!cliente) {
@@ -28,7 +20,7 @@ const cadastrarPedido = async (req, res) => {
         .first()
 
       if (!produtoValidacao) {
-        return res.status(404).json({ mensagem: 'Produto inválido' })
+        return res.status(404).json({ mensagem: 'Informe um produto válido' })
       }
 
       if (produtoValidacao.quantidade_estoque < produto.quantidade_produto) {
@@ -46,6 +38,7 @@ const cadastrarPedido = async (req, res) => {
 
     const cadastro = await knex('pedidos')
       .insert({
+        cliente_id,
         ...(observacao && { observacao }),
         valor_total: total
       })
@@ -60,7 +53,7 @@ const cadastrarPedido = async (req, res) => {
       })
     }
 
-    enviarEmail(cliente.nome, cliente.email)
+    // enviarEmail(cliente.nome, cliente.email)
 
     return res.status(201).json({ mensagem: 'passou' })
   } catch (error) {

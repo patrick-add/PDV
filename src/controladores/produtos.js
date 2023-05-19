@@ -48,7 +48,7 @@ const editarDadosProduto = async (req, res) => {
     //   }
     // })
 
-    if (produto_imagem) {
+    if (produto_imagem || produto_imagem == null) {
       const validatePR = await validateParams(req.params)
 
       if (validatePR.produto.produto_imagem) {
