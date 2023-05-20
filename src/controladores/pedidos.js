@@ -27,7 +27,7 @@ console.log(pedidoAceito)
 
     enviarEmail(pedidoAceito.cliente.nome, pedidoAceito.cliente.email)
 
-    return res.status(201).json({ mensagem: 'Pedido enviado com sucesso!', pedido: pedidoAceito.pedido })
+    return res.status(201).json({ mensagem: 'Pedido enviado com sucesso!', pedido: incluirPedido[0] })
   } catch (error) {
     console.error(error)
     return res.status(500).json({ mensagem: 'Erro interno' })
@@ -88,13 +88,17 @@ const produtos = await knex('produtos').where('id', 'in', arrayIDs).orderBy('id'
 
 for(let i = 0; i < arrayIDs.length; i++){
 
+  if(arrayIDs[i] === arrayIDs[i + 1]){
+    return { mensagem: "Não é permitido enviar o mesmo produto mais de uma vez. Altere apenas a quantidade!", status: 400 }
+  }
+
   if(!produtos[i] || produtos[i].id != arrayIDs[i]){  
     return { mensagem: `Produto de id: ${arrayIDs[i]} não existe !`, status: 404 }
   }
 
   if (produtos[i].quantidade_estoque < pedido_produtos[i].quantidade_produto){
     console.log('chegou no estoque')
-    return { mensagem: `Quantidade do produto: ${produtos[i].descricao} insuficiente em estoque.`, status: 400 }
+    return { mensagem: `Quantidade do produto: ${produtos[i].descricao} insuficiente em estoque.`, status: 403 }
   }
 
   pedidoAceito.pedido_produtos.push({
@@ -107,8 +111,8 @@ for(let i = 0; i < arrayIDs.length; i++){
   pedidoAceito.estoque[produtos[i].id] = produtos[i].quantidade_estoque - pedido_produtos[i].quantidade_produto
 }
 
-
-return pedidoAceito.cliente = cliente
+pedidoAceito.cliente = cliente
+return pedidoAceito
 }
 
 
