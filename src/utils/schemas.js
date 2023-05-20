@@ -111,14 +111,6 @@ const schemaClientes = joi.object({
   })
 })
 
-const schemaUpload = joi.object({
-  imagem: joi.string().uri().optional().allow(null).messages({
-    'string.uri': 'imagem deve ser uma URL válida.',
-    'string.empty': 'imagem não pode ser um campo vazio.',
-    'string.base': 'imagem deve ser um campo do tipo string.'
-  })
-})
-
 const schemaPedidos = joi.object({
   cliente_id: joi.number().integer().required().messages({
     'any.required': 'É obrigatório informar o ID do cliente!',
@@ -137,12 +129,23 @@ const schemaPedidos = joi.object({
       'any.required': 'É obrigatório informar o ID do produto!',
       'number.base': 'produto_id deve ser um campo numérico.',
       'number.empty': 'produto_id não pode ser um campo vazio.',
+      'number.integer': 'O valor inserido em produto_id não é válido.'
     }),
-    quantidade_produto: joi.number().integer().required().messages({
+    quantidade_produto: joi.number().min(1).integer().required().messages({
       'any.required': 'É obrigatório informar a quantidade do produto!',
       'number.base': 'quantidade deve ser um campo numérico.',
-      'string.empty': 'quantidade não pode ser um campo vazio.',
+      'number.empty': 'quantidade não pode ser um campo vazio.',
+      'number.min': 'A quantidade do produto deve ser no mínimo 1.',
+      'number.integer': 'O valor inserido em quantidade_produtos não é válido.'
     }),
+  })
+})
+
+const schemaUpload = joi.object({
+  imagem: joi.string().uri().optional().allow(null).messages({
+    'string.uri': 'imagem deve ser uma URL válida.',
+    'string.empty': 'imagem não pode ser um campo vazio.',
+    'string.base': 'imagem deve ser um campo do tipo string.'
   })
 })
 
