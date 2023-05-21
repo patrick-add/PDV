@@ -5,11 +5,11 @@ const cadastroDeUsuario = async (req, res) => {
   const { nome, email, senha } = req.body
 
   try {
-   const validate = await validateFK(req.body)
+    const validate = await validateFK(req.body)
 
-   if (validate.mensagem) {
+    if (validate.mensagem) {
       return res.status(validate.status).json({ mensagem: validate.mensagem })
-   }
+    }
 
     const criptografia = await bcrypt.hash(senha, 10)
 
@@ -17,9 +17,10 @@ const cadastroDeUsuario = async (req, res) => {
       .insert({ nome, email, senha: criptografia })
       .returning(['id', 'nome', 'email'])
 
-    return res.status(201).json({ 
+    return res.status(201).json({
       mensagem: 'Usuário cadastrado com sucesso.',
-      usuario: cadastro[0] })
+      usuario: cadastro[0]
+    })
   } catch (error) {
     console.error(error)
     return res.status(500).json({ mensagem: 'Erro interno.' })
@@ -35,7 +36,7 @@ const editarUsuario = async (req, res) => {
       const validate = await validateFK(req.body)
 
       if (validate.mensagem) {
-         return res.status(validate.status).json({ mensagem: validate.mensagem })
+        return res.status(validate.status).json({ mensagem: validate.mensagem })
       }
     }
 

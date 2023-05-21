@@ -16,7 +16,7 @@ create table
 
 insert into
     categorias (descricao)
-values ('Informática'), ('Celulares'), ('Beleza e Perfumaria'), ('Mercado'), ('Livros e Papelaria'), ('Moda'), ('Bebê'), ('Games');
+values ('Informática'), ('Celulares'), ('Beleza e Perfumaria'), ('Mercado'), ('Livros e Papelaria'), ('Brinquedos'), ('Moda'), ('Bebê'), ('Games');
 
 create table
     produtos (
@@ -26,6 +26,8 @@ create table
         valor integer not null,
         categoria_id integer not null references categorias(id)
     );
+
+-- alter table produtos add column produto_imagem text; 3° Sprint
 
 create table
     clientes (
@@ -39,4 +41,21 @@ create table
         bairro varchar(50),
         cidade varchar(50),
         estado varchar(2)
+    );
+
+create table
+    pedidos (
+        id serial primary key,
+        cliente_id integer not null references clientes(id),
+        observacao varchar(100),
+        valor_total integer not null
+    );
+
+create table
+    pedido_produtos (
+        id serial primary key,
+        pedido_id integer not null references pedidos(id),
+        produto_id integer not null references produtos(id),
+        quantidade_produto integer not null,
+        valor_produto integer not null
     );

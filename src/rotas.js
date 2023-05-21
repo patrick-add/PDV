@@ -1,22 +1,21 @@
 const path = require('path')
+const multer = require('./multer')
 const { Router } = require('express')
 const { listarCategorias } = require('./controladores/categorias')
 const { cadastroDeUsuario, editarUsuario, detalharDadosPerfilUsuario } = require('./controladores/usuarios')
 const { listarProduto, cadastrarProduto, editarDadosProduto, detalharProduto, deletarProdutoPorId } = require('./controladores/produtos')
 const login = require('./controladores/login')
 const autenticarUsuario = require('./validações/autenticacao_de_usuario')
-const { schemaUsuario, schemaLogin, schemaProdutos, schemaClientes } = require('./utils/schemas')
+const { schemaUsuario, schemaLogin, schemaProdutos, schemaClientes, schemaUpload, schemaPedidos } = require('./utils/schemas')
 const validarSchema = require('./intermediarios/validarSchema')
 const { detalharCliente, listarClientes, cadastrarCliente, editarDadosCliente } = require('./controladores/clientes')
+const { uploadDeImagem, listarImagens } = require('./controladores/uploads')
+const { cadastrarPedido, listarPedidos } = require('./controladores/pedidos')
+const excluirProduto = require('./intermediarios/excluirProduto')
 
 const rotas = Router()
 
-rotas.get('/', (req, res) => {
-  return res.status(200).sendFile(path.join(__dirname, '../public/pages/index.html'))
-}) // Patrick ve se consegue fazer essa função isolada em outro aqrquivo. vlw
-
-//PATRICK: NÂO DE CTRL+S EM ROTAS !!!!!!!!!!!!
-
+rotas.get('/', (req, res) => { return res.status(200).sendFile(path.join(__dirname, '../public/pages/index.html')) })
 
 rotas.get('/categoria', listarCategorias)
 
@@ -39,8 +38,14 @@ rotas.put('/cliente/:id', validarSchema(schemaClientes), editarDadosCliente)
 // Produtos
 rotas.post('/produto', validarSchema(schemaProdutos), cadastrarProduto)
 rotas.get('/produto', listarProduto)
-rotas.delete('/produto/:id', deletarProdutoPorId)
+rotas.delete('/produto/:id', excluirProduto, deletarProdutoPorId)
 rotas.put('/produto/:id', validarSchema(schemaProdutos), editarDadosProduto)
 rotas.get('/produto/:id', detalharProduto)
+
+// SPRINT 3
+rotas.post('/arquivo/upload', multer.single('imagem'), validarSchema(schemaUpload), uploadDeImagem)
+rotas.get('/arquivo', listarImagens)
+rotas.post('/pedido', validarSchema(schemaPedidos), cadastrarPedido)
+rotas.get('/pedido', listarPedidos)
 
 module.exports = rotas

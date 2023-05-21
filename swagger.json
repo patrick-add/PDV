@@ -713,7 +713,209 @@
       "500": { "description": "Erro interno." }
     }
   }
+},
+"/pedido": {
+  "post": {
+    "description": "Essa rota tem a finalidade de cadastrar um pedido.",
+    "security": [{ "bearerAuth": [] }],
+    "tags": ["Pedidos"],
+    "requestBody": {
+      "description": "Estrutura JSON que deve ser enviada para cadastrar um pedido.",
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "cliente_id": { "type": "integer", "description": "Identificação do cliente." },
+              "observacao": { "type": "string", "description": "Observação do pedido." },
+              "pedido_produtos": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "produto_id": { "type": "integer", "description": "Identificação do produto." },
+                    "quantidade_produto": { "type": "integer", "description": "Quantidade do produto." }
+                  }
+                }
+              }
+            }
+          },
+          "example": {
+            "cliente_id": 1,
+            "observacao": "Rua sem saída: beco escuro.",
+            "pedido_produtos": [
+              {
+                "produto_id": 1,
+                "quantidade_produto": 2
+              },
+              {
+                "produto_id": 2,
+                "quantidade_produto": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    "responses": {
+      "201": {
+        "description": "Success: Pedido cadastrado com sucesso.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": { "type": "string", "description": "Pedido cadastrado com sucesso." },
+                "pedido": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "integer", "description": "Identificação do pedido." },
+                    "cliente_id": { "type": "integer", "description": "Identificação do cliente." },
+                    "observacao": { "type": "string", "description": "Observação do pedido." },
+                    "valor_total": { "type": "integer", "description": "Valor total do pedido." }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "400": { "description": "É obrigatório informar: cliente_id || produto_id || quantidade_produto || Produto informado não possui estoque suficiente!"},
+    "422": { "description": "Não é permitido enviar o mesmo produto mais de uma vez. Altere apenas a quantidade!"},
+    "404": { "description": "Cliente informado não existe! || Produto informado não existe!"},
+    "401": { "description": "Para acessar este recurso um token de autenticação válido deve ser enviado. || Acesso não autorizado!" },  
+    "403": { "description": "Quantidade do produto: 'XXX' insuficiente em estoque." },
+    "500": { "description": "Erro interno." }
+  }
+},
+"get": {
+  "description": "Essa rota tem a finalidade de listar todos os pedidos.",
+  "security": [{ "bearerAuth": [] }],
+  "tags": ["Pedidos"],
+  "parameters": [
+    {
+      "in": "query",
+      "name": "cliente_id",
+      "description": "Identificação do cliente",
+      "required": false,
+      "schema": {
+        "type": "integer"
+      }
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "Success: Lista de pedidos.",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "pedido": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "integer", "description": "Identificação do pedido." },
+                    "cliente_id": { "type": "integer", "description": "Identificação do cliente." },
+                    "observacao": { "type": "string", "description": "Observação do pedido." },
+                    "valor_total": { "type": "integer", "description": "Valor total do pedido." }
+                  }
+                },  
+                "pedido_produtos": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "produto_id": { "type": "integer", "description": "Identificação do produto." },
+                      "quantidade_produto": { "type": "integer", "description": "Quantidade do produto." }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      } 
+    },
+    
+    "401": { "description": "Para acessar este recurso um token de autenticação válido deve ser enviado. || Acesso não autorizado!" },
+    "404": { "description": "Cliente informado não existe!" },
+    "500": { "description": "Erro interno." }
+  }
 }
+},
+"/arquivo/upload":{
+  "post": {
+    "description": "Essa rota tem a finalidade de fazer upload de um arquivo.",
+    "security": [{ "bearerAuth": [] }],
+    "tags": ["Arquivos"],
+    "requestBody": {
+      "description": "Estrutura JSON que deve ser enviada para fazer upload de uma imagem.",
+      "required": true,
+      "content": {
+        "multipart/form-data": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "imagem": { "type": "string", "format": "binary" }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success: Arquivo enviado com sucesso.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "url": { "type": "string", "description": "URL do arquivo." },
+               "path": { "type": "string", "description": "Caminho do arquivo." }
+              }
+            }
+          }
+        }
+      },
+      "400": { "description": "Imagem deve ser uma URL válida. || É obrigatorio carregar uma imagem." },
+      "401": { "description": "Para acessar este recurso um token de autenticação válido deve ser enviado. || Acesso não autorizado!" },
+      "500": { "description": "Erro interno." }
+    }
+  }
+},
+"/arquivo": {
+  "get": {
+    "description": "Essa rota tem a finalidade de listar todos os arquivos.",
+    "security": [{ "bearerAuth": [] }],
+    "tags": ["Arquivos"],
+    "responses": {
+      "200": {
+        "description": "Success: Lista de arquivos.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "url": { "type": "string", "description": "URL do arquivo." },
+                  "path": { "type": "string", "description": "Caminho do arquivo." }
+                }
+              }
+            }
+          }
+        }
+      },
+      "401": { "description": "Para acessar este recurso um token de autenticação válido deve ser enviado. || Acesso não autorizado!" },
+      "500": { "description": "Erro interno." }
+    }
+  }
+}
+}
+    
 
 }
-}
+
