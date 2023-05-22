@@ -6,9 +6,8 @@ const uploadDeImagem = async (req, res) => {
     const { file } = req
 
     if (!file) return res.status(400).json({ mensagem: 'É obrigatorio carregar uma imagem.' })
-    //Tentar validar de outra forma -- ou otras ...
+    
     const data = format(new Date(), "dd.MM.yyyy-HH:mm:ss")
-
     file.originalname = `${data}-${file.originalname}`
 
     try {

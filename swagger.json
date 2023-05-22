@@ -19,29 +19,6 @@
 
   "paths": {
     
-    "/categoria": {
-      "get": {
-        "description": "Essa rota tem a finalidade de listar todas as categorias cadastradas.",
-        "tags": ["Categorias"],
-        "responses": {
-          "200": {
-            "description": " Success: Lista de categorias cadastradas.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": { "type": "integer", "description": "Identificação da categoria" },
-                    "descricao": { "type": "string", "description": "Descrição da categoria" }
-                  }
-                }
-              }
-            }
-          },
-          "500": { "description": "Erro interno." }
-        }
-      }
-    },
     "/usuario": {
       "post": {
         "description": "Essa rota tem a finalidade de cadastrar um novo usuario no sistema.",
@@ -472,6 +449,29 @@
           "500": { "description": "Erro interno." }
         }
       }
+},
+"/categoria": {
+  "get": {
+    "description": "Essa rota tem a finalidade de listar todas as categorias cadastradas.",
+    "tags": ["Categorias"],
+    "responses": {
+      "200": {
+        "description": " Success: Lista de categorias cadastradas.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "integer", "description": "Identificação da categoria" },
+                "descricao": { "type": "string", "description": "Descrição da categoria" }
+              }
+            }
+          }
+        }
+      },
+      "500": { "description": "Erro interno." }
+    }
+  }
 },
 "/produto": {
   "post": {

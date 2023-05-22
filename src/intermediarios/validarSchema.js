@@ -1,4 +1,3 @@
-const knex = require('../conexao')
 
 const validarSchema = (joiSchemas) => async (req, res, next) => {
   try {

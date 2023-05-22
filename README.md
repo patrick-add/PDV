@@ -1,4 +1,3 @@
-
 # **API - PDV Fenda do Biquíni 08**
 
 ![Equipe 08](https://f005.backblazeb2.com/file/nilson-bucket/oficial.png)
@@ -27,7 +26,7 @@
 
 #### **Lista de Categorias:**
 
-- Visualização da lista de categorias existentes na API. 
+- Visualização da lista de categorias existentes na API.
 
 #### **Realizar cadastro de produtos:**
 
@@ -64,7 +63,7 @@
 #### **Detalhar um cliente:**
 
 - Obtem os detalhes um de seus clientes cadastrados.
-======
+
 #### **Cadastar pedido:**
 
 - Cadastrar um novo pedido no sistema.
@@ -80,6 +79,7 @@
 #### **Listar imagens:**
 
 - Obtem a URL de todas imagens no servidor de armazenamento.
+
 <br>
 
 ### - Informações: [Pagina Inicial](http://backend-fendadobiquini.me/)

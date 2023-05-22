@@ -111,7 +111,6 @@ async function validarPedido(pedido) {
     }
 
     if (produtos[i].quantidade_estoque < pedido_produtos[i].quantidade_produto) {
-      console.log('chegou no estoque')
       return {
         mensagem: `Quantidade do produto: ${produtos[i].descricao} insuficiente em estoque.`,
         status: 403

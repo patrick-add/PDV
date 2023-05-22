@@ -41,13 +41,6 @@ const editarDadosProduto = async (req, res) => {
       }
     }
 
-    // const teste = await Promise.all([validateFK(req.body), validateParams(req.params)])
-    // teste.find((validate) => {
-    //   if (validate.mensagem) {
-    //     return res.status(validate.status).json({ mensagem: validate.mensagem })
-    //   }
-    // })
-
     if (produto_imagem || produto_imagem == null) {
       const validatePR = await validateParams(req.params)
 
