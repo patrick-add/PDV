@@ -64,6 +64,22 @@
 #### **Detalhar um cliente:**
 
 - Obtem os detalhes um de seus clientes cadastrados.
+======
+#### **Cadastar pedido:**
+
+- Cadastrar um novo pedido no sistema.
+
+#### **Listar pedidos:**
+
+- Listar todos os pedidos cadastrados.
+
+#### **Upload de imagem:**
+
+- Upload de uma imagem no servidor de armazenamento.
+
+#### **Listar imagens:**
+
+- Obtem a URL de todas imagens no servidor de armazenamento.
 <br>
 
 ### - Informações: [Pagina Inicial](http://backend-fendadobiquini.me/)
