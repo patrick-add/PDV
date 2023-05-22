@@ -80,7 +80,7 @@
 
 - Obtem a URL de todas imagens no servidor de armazenamento.
 
-<br>
+---
 
 ### - Informações: [Pagina Inicial](http://backend-fendadobiquini.me/)
 
