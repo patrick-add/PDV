@@ -5,211 +5,82 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/home-page.css">
     <title>Fenda do Biquini</title>
-
-    <style>
-        
-        * {
-            font-family: 'Prompt', sans-serif;;
-        }
-
-         body {
-            margin: 0;
-            text-align: center;
-            background-color: #00d2e9;
-            overflow: hidden;
-            height: 100vh;
-            background-image: url(../assets/img/fenda-do-biquini-1024.png);
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-position: center center;
-            background-attachment: fixed;
-        } 
-
-        h1 {
-            color: white;
-            width: 50vh;
-            margin: auto;
-            margin-top: 5vh;
-            margin-bottom: 0;
-            border-radius: 5rem;
-            padding: 2vh;
-            background-color: rgba(10,23,55,0.6);
-        }
-
-
-    .listaAutores {
-        height: 100vh;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        list-style: none;
-        padding: 3vh;
-        margin: 10vh;
-        margin-top: 0vh;
-        padding-top: 0;
-    }
-
-    li {
-        position: relative;
-        color: white;
-        background-color: rgba(0, 0, 0, 0.3);
-        border-radius: 6rem;
-        padding: 10px;
-        margin: 10px;
-        display: grid;
-        
-    }
-
-    img {
-        height: 25vh;
-        border-radius: 50%;
-        position: relative;
-        left: 35vh;
-        top: 1vh;
-    }
-
-    .botao {
-        position:absolute; 
-        top:30%;
-        left:50%;
-        transform: translate(-50%, -50%);
-        border-radius: 1rem;
-    }
-
-
-    @media screen and (min-width: 320px) {
-    .listaAutores {
-        grid-template-columns: 1fr;
-    }
-
-    
-    .botao {
-        top: 12%;
-        left: 10%;
-    }
-
-    h1 {
-        position: relative;
-        left: 1.1rem;
-        width: 31vh;
-    }
-
-    img {
-        left: 0vh;
-        top: 0vh;
-    }
-
-    li {
-        border-radius: 2rem;
-    }
-
-    body {
-        display: block;
-        overflow: auto;
-    }
-}
-    @media screen and (min-width: 375px) {
-    .listaAutores {
-        grid-template-columns: 1fr;
-    }
-
-    h1 {
-        left: 0.1rem;
-    }
-
-    img {
-        left: 2vh;
-        top: 1vh;
-    }
-
-}
-
-@media screen and (min-width: 425px) {
-    img {
-        left: 7vh;
-    }
-}
-    @media screen and (min-width: 768px) {
-    .listaAutores {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    #imagemBody {
-        width: 48rem;
-    }
-
-    .botao {
-        top:30%;
-        left:50%;
-    }
-
-    img {
-        left: 11vh;
-    }
-
-    li {
-        margin-top: 8rem;
-    }
-    }
-    @media screen and (min-width: 1024px) {
-    #imagemBody {
-        width: 64rem;
-    }
-
-    img {
-        left: 25vh;
-    }
-
-    }
-    @media screen and (min-width: 1040px) {
-    #imagemBody {
-        width: 90rem;
-    }
-
-
-    }
-    @media screen and (min-width: 2560px) {
-    #imagemBody {
-        width: 160rem;
-        height: 85rem;
-    }
-
-    li {
-        font-size: 30px;
-    }
-
-    img {
-        left: 25vh;
-        top: 0vh;
-    }
-    }
-
-    #game {
-      top: 900px;
-      width: 1350px;
-      height: 500px;
-      border: none;
-    }
-
-    </style>
-
 </head>
-<body  onmousemove="document.getElementById('musica').play();">
-        <h1>DEVS: </h1>
-        <ol class="listaAutores">
-            <li>Patrick Andrade <img src="../assets/img/patrick.jpeg" alt="Patrick"></li>
-            <li>Mateus Fernando <img src="../assets/img/mateus.jpg" alt="Patrick"></li>
-            <li>Reunilson Barbosa <img src="../assets/img/reunilson.jpg" alt="Patrick"></li>
-            <li>William Diangellis <img src="../assets/img/willian.jpg" alt="Patrick"></li>
-        </ol>
-        <button class="botao" >Clique aqui</button>
-        <audio id="musica" >
-            <source src="../assets/audios/som-fenda-do-biquini.mpeg">
-        </audio>
 
-        <iframe src="../game/index.html" id="game"></iframe>
+<body>
 
+<button class="botao">Click ♫</button>
+<audio id="temaMusic" src="../assets/audios/som-fenda-do-biquini.mpeg"></audio>
+
+<img class="icone" src="../game/imagens/bob.gif" alt="Bob-dançante">
+<img class="icone2" src="../game/imagens/patrick.gif" alt="Patrick-dançante">
+
+<main>
+    <h1>Desenvolvedores</h1>
+
+<ol class="devs">
+    <li>
+        <img class="perfil" src="../assets/img/reunilson.jpg" alt="Reunilson">
+        <h2>Reunilson</h2>
+        <div class="contato">
+            <a href="https://discord.com/channels/Nilsooom#7507" target="_blank"><img src="https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white" target="_blank"></a>
+            <a href="mailto:nilsooom.b@gmail.com"><img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" target="_blank"></a>
+            <a href="https://www.linkedin.com/in/reunilson-dev-jr" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"></a>
+            <a href="https://wa.me/5511953311843" target="_blank"><img src="https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="WhatsApp"></a>
+        </div>
+    </li>
+
+    <li>
+    <img class="perfil" src="../assets/img/patrick.jpeg" alt="Patrick">
+    <h2>Patrick</h2>
+    <div class="contato">
+        <a href="https://discord.com/channels/PatrickAndrade#2420" target="_blank"><img src="https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white" target="_blank"></a>
+        <a href="mailto:PATRICKEMAIL"><img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" target="_blank"></a>
+        <a href="https://www.linkedin.com/in/patrick-add" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"></a>
+        <a href="https://wa.me/5521968086690" target="_blank"><img src="https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="WhatsApp"></a>
+    </div>
+    </li>
+
+    <li>
+    <img class="perfil" src="../assets/img/willian.jpg" alt="Willian">
+    <h2>Willian</h2>
+    <div class="contato">
+        <a href="https://discord.com/channels/WilliamDS#7349" target="_blank"><img src="https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white" target="_blank"></a>
+        <a href="mailto:WILLIANEMAIL"><img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" target="_blank"></a>
+        <a href="https://www.linkedin.com/in/williamdiangellis/" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"></a>
+        <a href="https://wa.me/553484136848" target="_blank"><img src="https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="WhatsApp"></a>
+    </div>
+    </li>
+
+    <li>
+    <img class="perfil" src="../assets/img/mateus.jpg" alt="Mateus">
+    <h2>Mateus</h2>
+    <div class="contato">
+        <a href="https://discord.com/channels/MateusFernando#5579" target="_blank"><img src="https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white" target="_blank"></a>
+        <a href="mailto:MATEUSEMAIL@gmail.com"><img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" target="_blank"></a>
+        <a href="https://www.linkedin.com/in/mateus-fernando-a65662145/" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"></a>
+        <a href="https://wa.me/5511964245663" target="_blank"><img src="https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="WhatsApp"></a>
+    </div>
+    </li>
+
+</ol>
+</main>
+
+<iframe src="../game/index.html" id="game"></iframe>
+    
 </body>
+
+
+<script>
+    const botao = document.querySelector('.botao');
+    const audio = document.querySelector('#temaMusic');
+
+    botao.addEventListener('click', () => {
+        audio.play();
+    })
+</script>
 </html>
